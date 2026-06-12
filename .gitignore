@@ -1,0 +1,47 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+D/.env
+D/.venv
+D/env
+D/venv
+
+# Packaging
+D/build/
+D/dist/
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS-specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IBSimion Simulation outputs & C++ builds inside folder D
+D/backend/ibsimu_wrapper
+D/backend/ibsimu_wrapper.o
+D/backend/geometry.obj
+D/backend/trajectories.txt
+D/backend/tof.txt
+D/backend/tof_histo.txt
+D/backend/tof_out.txt
+D/backend/tofgeom.dat
+D/backend/pout_*.txt
+D/backend/field.txt
+D/backend/tofplot_*.jpg
+D/pic_simulation.gif
