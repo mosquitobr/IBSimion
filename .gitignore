@@ -1,0 +1,28 @@
+﻿# ==========================================
+# FILTRO DE PRIVACIDADE ESTRETO - IBSIMION 2.0
+# ==========================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+build/
+dist/
+*.spec
+*.o
+*.a
+*.so
+BKP/
+D/backend/ibsimu_wrapper
+D/backend/Makefile.wsl
+D/backend/tof.txt
+D/backend/tof_out.txt
+D/backend/trajectories.txt
+D/backend/geometry.obj
+D/backend/pdb.dat
+D/backend/tofgeom.dat
+config_scenario.json
+test_temp_project.json
+D/bent/
+.gemini/
