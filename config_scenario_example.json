@@ -1,0 +1,67 @@
+{
+    "simulation_mode": "PIC",
+    "mesh_h": 0.001,
+    "mesh_dimensions": {
+        "z_max": 0.36,
+        "r_max": 0.035
+    },
+    "solver_params": {
+        "max_iterations": 150,
+        "dt": 5e-09
+    },
+    "geometries": [
+        {
+            "id": 1,
+            "name": "Source Body",
+            "file_path": "source_body.stl",
+            "type": "Dirichlet",
+            "voltage": 2500.0,
+            "translation": [
+                0.0,
+                0.0,
+                0.02
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Grade Positiva",
+            "file_path": "tofl203d.dxf",
+            "layer": "GRID_POS",
+            "type": "Dirichlet",
+            "voltage": 500.0,
+            "translation": [
+                0.0,
+                0.0,
+                0.11
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Tubo de Drift",
+            "file_path": "drift_tube.stl",
+            "type": "Dirichlet",
+            "voltage": -2924.0,
+            "translation": [
+                0.0,
+                0.0,
+                0.22
+            ]
+        }
+    ],
+    "beams": [
+        {
+            "nome": "Feixe de Ions Pesados 1",
+            "particulas": 5000,
+            "massa": 136.2,
+            "carga": 1.0,
+            "corrente": 0.001
+        },
+        {
+            "nome": "Feixe de Eletrons Rapidos",
+            "particulas": 3000,
+            "massa": 0.00054,
+            "carga": -1.0,
+            "corrente": 0.005
+        }
+    ]
+}
