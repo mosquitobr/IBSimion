@@ -4,6 +4,7 @@
 import os
 import numpy as np
 import pyvista as pv
+pv.global_theme.allow_empty_mesh = True
 from pyvistaqt import QtInteractor
 from PySide6.QtWidgets import QVBoxLayout, QWidget
 
@@ -20,9 +21,9 @@ class PyVistaWidget(QWidget):
         self.layout.addWidget(self.plotter)
         
         # Default styling
-        self.plotter.set_background("#0B0F19")
+        self.plotter.set_background("#E5E7EB")
         self.plotter.show_axes()
-        self.plotter.show_grid()
+        self.plotter.show_grid(color="#6B7280")
         
         # Tracks dictionary for fast lookup/removal
         self.trajectories = []
@@ -32,7 +33,7 @@ class PyVistaWidget(QWidget):
         """Clears all meshes from the plotter except grid/axes."""
         self.plotter.clear()
         self.plotter.show_axes()
-        self.plotter.show_grid()
+        self.plotter.show_grid(color="#6B7280")
         self.trajectories = []
         self.electrode_mesh = None
 
@@ -151,7 +152,7 @@ class PyVistaWidget(QWidget):
                 scalar_bar_args = {
                     'title_font_size': 12,
                     'label_font_size': 10,
-                    'color': 'white',  # Garante que as fontes numéricas e títulos fiquem visíveis no tema escuro
+                    'color': 'black',  # Garante que as fontes numéricas e títulos fiquem visíveis no tema claro
                     'fmt': '%.2e'      # Formata a notação científica de forma limpa (ex: 1.00e-02)
                 }
                 self.plotter.add_mesh(
@@ -180,18 +181,23 @@ class PyVistaWidget(QWidget):
             
         self.plotter.render()
         
-    def load_pic_snapshot(self, snapshot_path):
+    def load_pic_snapshot(self, snapshot_data_or_path):
         """Loads a single PIC snapshot (list of coordinates at time t) and renders particles as spheres."""
         # Remove old particles
         for name in list(self.plotter.renderer.actors.keys()):
             if name.startswith("pic_particles"):
                 self.plotter.remove_actor(name)
 
-        if not os.path.exists(snapshot_path):
-            return False
-
         try:
-            data = np.loadtxt(snapshot_path)
+            if isinstance(snapshot_data_or_path, str):
+                if not os.path.exists(snapshot_data_or_path):
+                    return False
+                data = np.loadtxt(snapshot_data_or_path)
+            else:
+                data = snapshot_data_or_path
+
+            if data is None:
+                return False
             if data.ndim == 1:
                 data = np.expand_dims(data, axis=0)
             if data.size == 0 or len(data) == 0:
@@ -215,6 +221,39 @@ class PyVistaWidget(QWidget):
             self.plotter.render()
             return True
         except Exception as e:
-            print(f"Error loading PIC snapshot {snapshot_path}: {e}")
+            print(f"Error loading PIC snapshot: {e}")
             return False
+
+    def apply_clipping_plane(self, coord, normal=(0, 0, -1), origin=None):
+        """Applies a clipping plane to the loaded electrode mesh at the specified coordinate and normal."""
+        if self.electrode_mesh is None:
+            return
+        
+        try:
+            self.plotter.remove_actor("electrodes")
+            
+            if origin is None:
+                if normal == (0, 0, -1):
+                    origin = (0, 0, coord)
+                elif normal == (0, -1, 0):
+                    origin = (0, coord, 0)
+                elif normal == (-1, 0, 0):
+                    origin = (coord, 0, 0)
+                else:
+                    origin = (0, 0, coord)
+                
+            clipped = self.electrode_mesh.clip(normal=normal, origin=origin)
+            
+            self.plotter.add_mesh(
+                clipped,
+                color="silver",
+                opacity=0.35,
+                show_edges=True,
+                edge_color="dimgray",
+                name="electrodes"
+            )
+            self.plotter.render()
+        except Exception as e:
+            print(f"Error applying clipping plane: {e}")
+
 
