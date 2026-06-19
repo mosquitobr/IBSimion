@@ -1,7 +1,7 @@
 ﻿# IBSimion 2.0 — Plataforma de Simulação de Óptica de Partículas / Particle Optics Simulation Platform
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![Version](https://img.shields.io/badge/version-2.2.0--Beta-blue)
+![Version](https://img.shields.io/badge/version-2.0-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-lightgrey)
 
 ---
