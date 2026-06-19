@@ -26,3 +26,14 @@ config_scenario.json
 test_temp_project.json
 D/bent/
 .gemini/
+
+# Bloquear as monografias confidenciais na pasta A
+A/MONOGRAFIA Parte I.pdf
+A/MONOGRAFIA Parte II.pdf
+
+# Bloquear as pastas de rascunhos e simulações antigas
+B/
+C/
+
+# Bloquear a planilha de cálculo analítico
+Calculo partículas.xlsx
