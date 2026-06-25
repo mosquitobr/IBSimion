@@ -1,0 +1,60 @@
+# =============================================================================
+# IBSimion 2.0.1.e3l - Dedicated Gitignore for E/E3/
+# =============================================================================
+
+# Ignore Python caches and local virtual environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# Ignore compiled C++ binaries and object files
+ibsimu_wrapper
+*.o
+*.a
+*.so
+
+# Ignore local execution artifacts and data dumps
+backend/pout_*.txt
+backend/field.txt
+backend/potential.txt
+backend/charge_density.dat
+backend/potential_field.dat
+backend/trajectory_density.dat
+backend/tof.txt
+backend/tof_histo.txt
+backend/tof_out.txt
+backend/trajectories.txt
+backend/geometry.obj
+backend/config_scenario.json
+bent/teste1/tofl203d
+bent/teste2/einzel3d
+bent/teste3/solenoid
+bent/teste*/tof.txt
+bent/teste*/emit.txt
+bent/teste*/tof_histo.txt
+bent/teste*/tof_out.txt
+bent/teste*/tofgeom.dat
+bent/teste*/pdb.dat
+bent/teste*/*.jpg
+bent/teste*/config_scenario.json
+*.tmp
+*.log
+
+# Whitelist source files, scripts and assets under E/E3/ to bypass root ignores
+!install_and_launch.sh
+!*.md
+!frontend/*.py
+!frontend/*.png
+!backend/*.cpp
+!backend/Makefile
+!backend/config_scenario_example.json
+!bent/*.py
+!bent/teste*/*.cpp
+!bent/teste*/Makefile
+!bent/teste*/*.dxf
+!bent/teste3/sol.txt
+!data/*.dxf
+!data/*.txt
