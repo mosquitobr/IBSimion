@@ -1,0 +1,180 @@
+{
+    "h": "0.001",
+    "zmax": "0.36",
+    "rmax": "0.035",
+    "bfield_enabled": false,
+    "bfield_path": "field.txt",
+    "regime": "CW",
+    "dt": "5e-8",
+    "tfinal": "5.1e-6",
+    "w_trans": "2.0",
+    "w_emit": "0.5",
+    "w_tof": "1.0",
+    "max_iter": "20",
+    "threads": 15,
+    "dump_potential": true,
+    "dump_charge_density": true,
+    "dump_trajectory_density": true,
+    "dump_tof": true,
+    "geometries": [
+        {
+            "name": "deteletrons",
+            "file_path": "C:/Users/mosqu/OneDrive/Antigravity/IBSimion/D/bent/teste1/tofl203d.dxf",
+            "layer": "deteletrons",
+            "voltage": 3700.0,
+            "type": "Dirichlet",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 0.001,
+            "mapping": "rotz"
+        },
+        {
+            "name": "detions",
+            "file_path": "C:/Users/mosqu/OneDrive/Antigravity/IBSimion/D/bent/teste1/tofl203d.dxf",
+            "layer": "detions",
+            "voltage": -4800.0,
+            "type": "Dirichlet",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 0.001,
+            "mapping": "rotz"
+        },
+        {
+            "name": "drift",
+            "file_path": "C:/Users/mosqu/OneDrive/Antigravity/IBSimion/D/bent/teste1/tofl203d.dxf",
+            "layer": "drift",
+            "voltage": -2924.0,
+            "type": "Dirichlet",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 0.001,
+            "mapping": "rotz"
+        },
+        {
+            "name": "gradenegativa",
+            "file_path": "C:/Users/mosqu/OneDrive/Antigravity/IBSimion/D/bent/teste1/tofl203d.dxf",
+            "layer": "gradenegativa",
+            "voltage": -500.0,
+            "type": "Dirichlet",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 0.001,
+            "mapping": "rotz"
+        },
+        {
+            "name": "gradepositiva",
+            "file_path": "C:/Users/mosqu/OneDrive/Antigravity/IBSimion/D/bent/teste1/tofl203d.dxf",
+            "layer": "gradepositiva",
+            "voltage": 500.0,
+            "type": "Dirichlet",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 0.001,
+            "mapping": "rotz"
+        },
+        {
+            "name": "lente",
+            "file_path": "C:/Users/mosqu/OneDrive/Antigravity/IBSimion/D/bent/teste1/tofl203d.dxf",
+            "layer": "lente",
+            "voltage": -950.0,
+            "type": "Dirichlet",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": 0.001,
+            "mapping": "rotz"
+        }
+    ],
+    "beams": [
+        {
+            "nome": "Feixe 1",
+            "particulas": 3000,
+            "corrente": 1.22e-05,
+            "massa": 136.2,
+            "carga": 1.0,
+            "energy": 0.0454,
+            "emittance": 2.03e-05,
+            "distribution": "Uniform",
+            "radius": 0.0005,
+            "z_start": 0.081,
+            "orig_z": 0.081,
+            "orig_x": 0.0,
+            "orig_y": 0.0,
+            "dir_x": 0.0,
+            "dir_z": 1.0
+        },
+        {
+            "nome": "Feixe 2",
+            "particulas": 3000,
+            "corrente": 1.22e-05,
+            "massa": 137.2,
+            "carga": 1.0,
+            "energy": 0.0458,
+            "emittance": 2.03e-05,
+            "distribution": "Uniform",
+            "radius": 0.0005,
+            "z_start": 0.081,
+            "orig_z": 0.081,
+            "orig_x": 0.0,
+            "orig_y": 0.0,
+            "dir_x": 0.0,
+            "dir_z": 1.0
+        },
+        {
+            "nome": "Feixe 3",
+            "particulas": 3000,
+            "corrente": 1.22e-05,
+            "massa": 138.2,
+            "carga": 1.0,
+            "energy": 0.0461,
+            "emittance": 2.03e-05,
+            "distribution": "Uniform",
+            "radius": 0.0005,
+            "z_start": 0.081,
+            "orig_z": 0.081,
+            "orig_x": 0.0,
+            "orig_y": 0.0,
+            "dir_x": 0.0,
+            "dir_z": 1.0
+        },
+        {
+            "nome": "e",
+            "particulas": 9000,
+            "corrente": 0.306,
+            "massa": 0.000545,
+            "carga": -1.0,
+            "energy": 12.7,
+            "emittance": 2.43e-09,
+            "distribution": "Uniform",
+            "radius": 0.0005,
+            "z_start": 0.081,
+            "orig_z": 0.081,
+            "orig_x": 0.0,
+            "orig_y": 0.0,
+            "dir_x": 0.0,
+            "dir_z": 1.0
+        }
+    ],
+    "tof_style": 0,
+    "plane_z": "0.3549",
+    "plane_mode": 0,
+    "plane_orient": 2,
+    "map_2d": 0
+}

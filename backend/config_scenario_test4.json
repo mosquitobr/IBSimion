@@ -1,0 +1,91 @@
+{
+    "mode": "CW",
+    "h": 0.0005,
+    "xmin": 0.0,
+    "xmax": 0.09,
+    "ymin": 0.0,
+    "ymax": 0.05,
+    "zmin": -0.005,
+    "zmax": 0.12,
+    "mirror": [
+        true,
+        false,
+        true,
+        false,
+        false,
+        false
+    ],
+    "boundaries": [
+        "Neumann",
+        "Neumann",
+        "Neumann",
+        "Neumann",
+        "Neumann",
+        "Neumann"
+    ],
+    "plasma_voltage": 5.0,
+    "plasma_debye": 0.0002,
+    "plasma_Te": 5.0,
+    "iterations": 5,
+    "threads": 8,
+    "dump_potential": true,
+    "dump_charge_density": true,
+    "dump_trajectory_density": true,
+    "geometries": [
+        {
+            "name": "Plasma Electrode",
+            "file_path": "../data/slit_assembly_plasma_1.stl",
+            "type": "Dirichlet",
+            "voltage": 0.0,
+            "translation": [
+                -0.375303,
+                -0.306421,
+                0.233167
+            ],
+            "scale": 1.0,
+            "mapping": "stl"
+        },
+        {
+            "name": "Puller Electrode",
+            "file_path": "../data/slit_assembly_puller_2.stl",
+            "type": "Dirichlet",
+            "voltage": -50000.0,
+            "translation": [
+                -0.375303,
+                -0.306421,
+                0.233167
+            ],
+            "scale": 1.0,
+            "mapping": "stl"
+        },
+        {
+            "name": "GND Electrode",
+            "file_path": "../data/slit_assembly_gnd_3.stl",
+            "type": "Dirichlet",
+            "voltage": -40000.0,
+            "translation": [
+                -0.375303,
+                -0.306421,
+                0.233167
+            ],
+            "scale": 1.0,
+            "mapping": "stl"
+        }
+    ],
+    "beams": [
+        {
+            "nome": "Feixe Retangular",
+            "shape": "rectangular",
+            "massa": 1.0,
+            "carga": 1.0,
+            "corrente": 468.0,
+            "energy": 2.5,
+            "Tp": 0.0,
+            "Tt": 0.5,
+            "z_start": -0.005,
+            "size1": 0.065,
+            "size2": 0.006,
+            "particulas": 80425
+        }
+    ]
+}
