@@ -62,3 +62,8 @@ bent/teste*/config_scenario.json
 # Exception: Explicitly ignore walkthrough.md even with the markdown whitelist active
 **/walkthrough*.md
 
+
+# Exclude image formats in subdirectories
+**/*.jpg
+**/*.jpeg
+**/*.png
