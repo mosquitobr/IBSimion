@@ -60,5 +60,5 @@ bent/teste*/config_scenario.json
 !frontend/ibsimion_icon.png
 
 # Exception: Explicitly ignore walkthrough.md even with the markdown whitelist active
-walkthrough*.md
+**/walkthrough*.md
 
