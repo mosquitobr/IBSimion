@@ -658,7 +658,7 @@ def run_test4():
     # Write scenario JSON for wrapper
     scenario_json = {
         "mode": "CW",
-        "h": 0.0005,
+        "h": 0.001,
         "xmin": 0.0,
         "xmax": 0.090,
         "ymin": 0.0,
@@ -667,7 +667,7 @@ def run_test4():
         "zmax": 0.120,
         "iterations": 5,
         "sc_alpha": 0.9,
-        "threads": 8,
+        "threads": 2,
         "plasma_voltage": 5.0,
         "plasma_Te": 5.0,
         "plasma_debye": 0.0002,
@@ -760,6 +760,160 @@ def run_test4():
     success = (epsilon_err < 0.10 and alpha_err < 1.5 and beta_err < 0.3)
     return success, epsilon_err
 
+def run_test5():
+    print("\n==========================================")
+    print("RUNNING TEST 5: PLASMA2D (2D Cartesian with DXF and Plasma)")
+    print("==========================================")
+    
+    test_dir = os.path.join(BENT_DIR, "teste5")
+    wsl_test_dir = f"{WSL_BENT_DIR}/teste5"
+    
+    # Clean previous output
+    native_emit = os.path.join(test_dir, "emit.txt")
+    wrapper_tof = os.path.join(BACKEND_DIR, "tof.txt")
+    for f in [native_emit, wrapper_tof]:
+        if os.path.exists(f):
+            os.remove(f)
+            
+    # Compile native benchmark
+    print("Compiling native plasma...")
+    build_res = run_cmd_wsl(f"cd {wsl_test_dir} && make clean && make")
+    if build_res.returncode != 0:
+        print("Error compiling plasma:")
+        print(build_res.stderr)
+        return False, "Compilation error"
+        
+    # Run native benchmark
+    print("Running native plasma...")
+    run_cmd_wsl(f"cd {wsl_test_dir} && ./plasma")
+    
+    if not os.path.exists(native_emit):
+        print("Error: Native run did not generate emit.txt")
+        return False, "No native output"
+        
+    # Parse last line of emit.txt for alpha, beta, emittance
+    bench_twiss = None
+    with open(native_emit, "r") as f:
+        for line in f:
+            parts = line.strip().split()
+            if len(parts) == 3:
+                try:
+                    bench_twiss = [float(x) for x in parts]
+                except ValueError:
+                    pass
+    if not bench_twiss:
+        return False, "Failed to parse native emittance output"
+        
+    alpha_bench, beta_bench, epsilon_bench = bench_twiss
+    
+    # Write scenario JSON for wrapper
+    scenario_json = {
+        "domain_type": "2D",
+        "mode": "CW",
+        "h": 0.001,
+        "xmin": -0.002,
+        "xmax": 0.078,
+        "ymin": 0.0,
+        "ymax": 0.050,
+        "zmin": 0.0,
+        "zmax": 0.0,
+        "iterations": 15,
+        "sc_alpha": 0.9,
+        "threads": 2,
+        "plasma_enabled": True,
+        "plasma_voltage": 5.0,
+        "plasma_Te": 5.0,
+        "plasma_debye": 0.001,
+        "plasma_axis": "X",
+        "boundaries": ["Neumann", "Neumann", "Neumann", "Neumann", "Neumann", "Neumann"],
+        "mirror": [False, False, True, False, False, False],
+        "geometries": [
+            {
+                "name": "plasma",
+                "file_path": "../bent/teste5/plasma.dxf",
+                "layer": "plasma",
+                "voltage": 0.0,
+                "type": "Dirichlet",
+                "translation": [0.0, 0.0, 0.0],
+                "scale": 0.001,
+                "mapping": "rotz"
+            },
+            {
+                "name": "puller",
+                "file_path": "../bent/teste5/plasma.dxf",
+                "layer": "puller",
+                "voltage": -40000.0,
+                "type": "Dirichlet",
+                "translation": [0.0, 0.0, 0.0],
+                "scale": 0.001,
+                "mapping": "rotz"
+            }
+        ],
+        "beams": [
+            {
+                "nome": "PlasmaBeam",
+                "particulas": 1000,
+                "energy": 2.5,
+                "massa": 1.0,
+                "carga": 1.0,
+                "z_start": -0.002,
+                "size1": 0.010,
+                "size2": 0.0,
+                "radius": 0.010,
+                "current_density": 600.0,
+                "Tt": 0.1,
+                "Tp": 0.0,
+                "emittance": 0.0,
+                "current": 6.0
+            }
+        ],
+        "diag_plane_z": 0.078,
+        "dump_potential": False,
+        "dump_charge_density": False,
+        "dump_trajectory_density": False,
+        "dump_tof": True,
+        "generate_jpg": 0,
+        "interactive_plot": 0,
+        "solver_type": "Newton-Raphson Não-Linear",
+        "solver_eps": 1e-4,
+        "solver_imax": 10000,
+        "newton_eps": 1e-4,
+        "newton_imax": 10
+    }
+    
+    json_path = os.path.join(test_dir, "config_scenario.json")
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(scenario_json, f, indent=4)
+        
+    # Run wrapper simulation
+    print("Running ibsimu_wrapper for test 5...")
+    run_res = run_cmd_wsl(f"cd {WSL_BACKEND_DIR} && ./ibsimu_wrapper ../bent/teste5/config_scenario.json")
+    if run_res.returncode != 0:
+        print("Error running wrapper:")
+        print(run_res.stderr)
+        return False, "Wrapper run error"
+        
+    wrapper_metrics = calculate_twiss_from_tof(wrapper_tof, plane='X')
+    if not wrapper_metrics:
+        return False, "Failed to parse wrapper metrics"
+        
+    alpha_sim = wrapper_metrics["alpha"]
+    beta_sim = wrapper_metrics["beta"]
+    epsilon_sim = wrapper_metrics["emittance"]
+    
+    # Calculate errors
+    alpha_err = abs(alpha_sim - alpha_bench)
+    beta_err = abs(beta_sim - beta_bench)
+    epsilon_err = abs(epsilon_sim - epsilon_bench) / epsilon_bench if epsilon_bench > 0 else 0.0
+    
+    print(f"Test 5 Results:")
+    print(f"  Alpha:   Bench = {alpha_bench:.6f} | Sim = {alpha_sim:.6f} | Err: {alpha_err:.6e}")
+    print(f"  Beta:    Bench = {beta_bench:.6f} | Sim = {beta_sim:.6f} | Err: {beta_err:.6e}")
+    print(f"  Epsilon: Bench = {epsilon_bench:.6e} | Sim = {epsilon_sim:.6e} | Err: {epsilon_err:.2%}")
+    
+    success = (epsilon_err < 0.10 and alpha_err < 2.0 and beta_err < 0.3)
+    return success, epsilon_err
+
 def main():
     print("Starting IBSimion 2.0 Global Regression Test Robot...")
     
@@ -767,6 +921,7 @@ def main():
     t2_pass, t2_div = run_test2()
     t3_pass, t3_div = run_test3()
     t4_pass, t4_div = run_test4()
+    t5_pass, t5_div = run_test5()
     
     print("\n==========================================")
     print("GLOBAL REGRESSION REPORT")
@@ -781,8 +936,9 @@ def main():
     report_line(2, "einzel3d", t2_pass, t2_div)
     report_line(3, "solenoid", t3_pass, t3_div)
     report_line(4, "slit3d", t4_pass, t4_div)
+    report_line(5, "plasma2d", t5_pass, t5_div)
     
-    if t1_pass and t2_pass and t3_pass and t4_pass:
+    if t1_pass and t2_pass and t3_pass and t4_pass and t5_pass:
         print("\n[SUCCESS] All regression tests passed successfully!")
         sys.exit(0)
     else:

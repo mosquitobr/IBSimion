@@ -305,11 +305,11 @@ int main( int argc, char **argv )
                       << " with step h = " << h_param << " m" << std::endl;
             geom_ptr = new Geometry( MODE_CYL, Int3D(nz, nr, 1), Vec3D(zmin, 0.0, 0.0), h_param );
         } else if (domain_type == "2D") {
-            int nz = (int)std::round((zmax - zmin) / h_param) + 1;
+            int nx = (int)std::round((xmax - xmin) / h_param) + 1;
             int ny = (int)std::round((ymax - ymin) / h_param) + 1;
-            std::cout << "Mesh dimensions (2D Cartesiano): " << nz << "x" << ny << "x1"
+            std::cout << "Mesh dimensions (2D Cartesiano): " << nx << "x" << ny << "x1"
                       << " with step h = " << h_param << " m" << std::endl;
-            geom_ptr = new Geometry( MODE_2D, Int3D(nz, ny, 1), Vec3D(zmin, ymin, 0.0), h_param );
+            geom_ptr = new Geometry( MODE_2D, Int3D(nx, ny, 1), Vec3D(xmin, ymin, 0.0), h_param );
         } else if (domain_type == "2DCYL") {
             int nz = (int)std::round((zmax - zmin) / h_param) + 1;
             int nr = (int)std::round(rmax / h_param) + 1;
@@ -327,6 +327,9 @@ int main( int argc, char **argv )
         Geometry &geom = *geom_ptr;
 
         bool pmirror[6] = { false, false, false, false, false, false };
+        if (domain_type == "2D" || domain_type == "2D_CYL" || domain_type == "2DCYL") {
+            pmirror[2] = true; // Espelhamento padrão em Ymin (rmin) para resolvedor 2D
+        }
         if (cfg.contains("mirror") && cfg["mirror"].is_array() && cfg["mirror"].size() >= 6) {
             for(int i = 0; i < 6; ++i) {
                 try {
@@ -360,6 +363,13 @@ int main( int argc, char **argv )
                 geom.set_boundary( 3, Bound(BOUND_DIRICHLET, 0.0) ); // ymin grounded
                 geom.set_boundary( 4, Bound(BOUND_DIRICHLET, 0.0) ); // ymax grounded
             }
+        }
+
+        // Forçar Neumann nas fronteiras transversais (3 e 4) em 2D Cartesiano para simetria física
+        if (domain_type == "2D") {
+            std::cout << "Forcing 2D Cartesian boundaries 3 and 4 to BOUND_NEUMANN for physical symmetry" << std::endl;
+            geom.set_boundary(3, Bound(BOUND_NEUMANN, 0.0));
+            geom.set_boundary(4, Bound(BOUND_NEUMANN, 0.0));
         }
 
         // Dynamic solids and boundary IDs
@@ -445,20 +455,25 @@ int main( int argc, char **argv )
         }
 
         geom.build_mesh();
-        geom.build_surface();
-        geom.save( "tofgeom.dat" );
+        bool is_3d_domain = (domain_type == "3D" || (domain_type != "2D" && domain_type != "2D_CYL" && domain_type != "2DCYL"));
+        if (is_3d_domain) {
+            geom.build_surface();
+            geom.save( "tofgeom.dat" );
 
-        std::cout << "Saving surface mesh to geometry.obj..." << std::endl;
-        ofstream fileObj( "geometry.obj" );
-        for( uint32_t a = 0; a < geom.surface_vertexc(); a++ ) {
-            const Vec3D &v = geom.surface_vertex(a);
-            fileObj << "v " << v[0] << " " << v[1] << " " << v[2] << "\n";
+            std::cout << "Saving surface mesh to geometry.obj..." << std::endl;
+            ofstream fileObj( "geometry.obj" );
+            for( uint32_t a = 0; a < geom.surface_vertexc(); a++ ) {
+                const Vec3D &v = geom.surface_vertex(a);
+                fileObj << "v " << v[0] << " " << v[1] << " " << v[2] << "\n";
+            }
+            for( uint32_t a = 0; a < geom.surface_trianglec(); a++ ) {
+                const VTriangle &t = geom.surface_triangle(a);
+                fileObj << "f " << (t[0]+1) << " " << (t[1]+1) << " " << (t[2]+1) << "\n";
+            }
+            fileObj.close();
+        } else {
+            remove("geometry.obj");
         }
-        for( uint32_t a = 0; a < geom.surface_trianglec(); a++ ) {
-            const VTriangle &t = geom.surface_triangle(a);
-            fileObj << "f " << (t[0]+1) << " " << (t[1]+1) << " " << (t[2]+1) << "\n";
-        }
-        fileObj.close();
 
         // Construct the fields
         EpotField epot( geom );
@@ -482,17 +497,32 @@ int main( int argc, char **argv )
         }
         efield.set_extrapolation( efldextrpl );
 
-        EpotBiCGSTABSolver solver( geom );
+        std::string solver_type = get_str(cfg, "solver_type", "Poisson Linear (Simples)");
+        bool plasma_enabled = false;
+        if (cfg.contains("plasma_enabled") && cfg["plasma_enabled"].is_boolean()) {
+            plasma_enabled = cfg["plasma_enabled"].get<bool>();
+        }
+        if (cfg.contains("plasma_voltage") && !cfg.contains("solver_type")) {
+            // Compatibilidade com projetos legados
+            solver_type = "Newton-Raphson Não-Linear";
+            plasma_enabled = true;
+        }
+
         double solver_eps = get_double(cfg, "solver_eps", 1e-4);
         int solver_imax = get_int(cfg, "solver_imax", 1000000);
-        solver.set_eps( solver_eps );
-        solver.set_imax( solver_imax );
+        double newton_eps = get_double(cfg, "newton_eps", 1e-4);
+        int newton_imax = get_int(cfg, "newton_imax", 10);
+
+        EpotBiCGSTABSolver solver( geom, solver_eps, solver_imax, newton_eps, newton_imax, true );
 
         InitialPlasma *init_plasma = NULL;
-        if (cfg.contains("plasma_voltage")) {
-            double plasma_voltage = get_double(cfg, "plasma_voltage", 0.0);
-            double debye = get_double(cfg, "plasma_debye", 2e-4);
+        if (solver_type == "Newton-Raphson Não-Linear" && plasma_enabled) {
+            double plasma_voltage = get_double(cfg, "plasma_voltage", 5.0);
+            double debye = get_double(cfg, "plasma_debye", 1e-3);
             std::string p_axis_str = get_str(cfg, "plasma_axis", "Z");
+            if (domain_type == "2D") {
+                p_axis_str = "X";
+            }
             
             decltype(AXIS_Z) p_axis = AXIS_Z;
             if (p_axis_str == "X") p_axis = AXIS_X;
@@ -500,9 +530,9 @@ int main( int argc, char **argv )
             
             init_plasma = new InitialPlasma( p_axis, debye );
             solver.set_initial_plasma( plasma_voltage, init_plasma );
-            std::cout << "Configured Initial Plasma at axis " << p_axis_str 
+            std::cout << "Configured Newton-Raphson Initial Plasma at axis " << p_axis_str 
                       << " with voltage " << plasma_voltage 
-                      << " V and Debye-like transition " << debye << " m." << std::endl;
+                      << " V and Debye " << debye << " m." << std::endl;
         }        ParticleDataBase *pdb_ptr = NULL;
         if (domain_type == "2D_CYL" || domain_type == "2DCYL") {
             pdb_ptr = new ParticleDataBaseCyl( geom );
@@ -521,10 +551,13 @@ int main( int argc, char **argv )
             int max_iterations = get_int(cfg, "iterations", 5);
             std::cout << "Running CW simulation with " << max_iterations << " iterations." << std::endl;
             for( size_t iter = 0; iter < max_iterations; iter++ ) {
-                if (iter == 1 && cfg.contains("plasma_voltage")) {
-                    double rhoe = pdb.get_rhosum();
+                if (iter == 1 && solver_type == "Newton-Raphson Não-Linear" && plasma_enabled) {
+                    double rhoe = get_double(cfg, "plasma_rhoe", pdb.get_rhosum());
+                    if (rhoe <= 1e-10) {
+                        rhoe = pdb.get_rhosum();
+                    }
                     double Te = get_double(cfg, "plasma_Te", 5.0);
-                    double Up = get_double(cfg, "plasma_voltage", 0.0);
+                    double Up = get_double(cfg, "plasma_voltage", 5.0);
                     solver.set_pexp_plasma( rhoe, Te, Up );
                     std::cout << "Configured positive ion plasma (PEXP) with rhoe = " << rhoe 
                               << ", Te = " << Te << " eV, Up = " << Up << " V." << std::endl;
@@ -579,6 +612,15 @@ int main( int argc, char **argv )
                             std::cout << "Converting input velocity " << velocity << " m/s to energy " << energy_val << " eV" << std::endl;
                         }
                         
+                        // If beam name is "plasma" (case insensitive), override starting energy to 0.5 * Te (Boltzmann sheath model)
+                        std::string nome_lower = nome;
+                        std::transform(nome_lower.begin(), nome_lower.end(), nome_lower.begin(), ::tolower);
+                        if (nome_lower.find("plasma") != std::string::npos && cfg.contains("plasma_Te")) {
+                            double Te = get_double(cfg, "plasma_Te", 5.0);
+                            energy_val = 0.5 * Te;
+                            std::cout << "Plasma beam detected. Overriding starting energy to 0.5 * Te = " << energy_val << " eV" << std::endl;
+                        }
+                        
                         if (Tt <= 0.0) {
                             double scale_dim = is_rect ? tam_x : radius;
                             if (emittance > 0.0 && scale_dim > 0.0) {
@@ -622,9 +664,11 @@ int main( int argc, char **argv )
                             }
                             std::cout << "Injecting 2D Planar beam: " << nome << ", particles: " << n_part
                                       << ", J: " << J << ", energy: " << energy_val << " eV, radius: " << radius << std::endl;
+                            double y0_val = std::max(0.0, orig_y);
+                            double y1_val = std::max(0.0, orig_y + radius);
                             pdb_2d->add_2d_beam_with_energy(
                                 n_part, J, charge, mass, energy_val, Tp, Tt,
-                                orig_z, orig_y, 0.0, radius
+                                xmin, y0_val, xmin, y1_val
                             );
                         } else {
                             ParticleDataBase3D *pdb_3d = static_cast<ParticleDataBase3D*>(pdb_ptr);
@@ -672,7 +716,7 @@ int main( int argc, char **argv )
                     fileTraj << "TID " << k << " " << pp.m() << " " << pp.q() << " " << pp.IQ() << "\n";
                     for ( size_t i = 0; i < pp.traj_size(); i++ ) {
                         const ParticlePCyl &pt = pp.traj( i );
-                        fileTraj << pt[1] << " " << 0.0 << " " << pt[0] << " " << pt[3] << "\n";
+                        fileTraj << pt[0] << " " << pt[3] << " " << 0.0 << " " << pt[1] << "\n";
                     }
                 }
             } else if (domain_type == "2D") {
@@ -684,7 +728,7 @@ int main( int argc, char **argv )
                     fileTraj << "TID " << k << " " << pp.m() << " " << pp.q() << " " << pp.IQ() << "\n";
                     for ( size_t i = 0; i < pp.traj_size(); i++ ) {
                         const ParticleP2D &pt = pp.traj( i );
-                        fileTraj << 0.0 << " " << pt[1] << " " << pt[0] << " " << pt[3] << "\n";
+                        fileTraj << pt[0] << " " << pt[1] << " " << pt[3] << " " << 0.0 << "\n";
                     }
                 }
             } else {
@@ -704,25 +748,53 @@ int main( int argc, char **argv )
 
             // Diagnostics plane
             double diag_plane_z = get_double(cfg, "diag_plane_z", 0.3549);
-            std::vector<trajectory_diagnostic_e> diagnostics;
-            diagnostics.push_back( DIAG_T );
-            diagnostics.push_back( DIAG_X );
-            diagnostics.push_back( DIAG_VX );
-            diagnostics.push_back( DIAG_Y );
-            diagnostics.push_back( DIAG_VY );
-            diagnostics.push_back( DIAG_Z );
-            diagnostics.push_back( DIAG_VZ );
-            diagnostics.push_back( DIAG_MASS );
-            diagnostics.push_back( DIAG_QM );
-            diagnostics.push_back( DIAG_CURR );
-
             TrajectoryDiagnosticData tof;
             if (domain_type == "2D_CYL" || domain_type == "2DCYL" || domain_type == "2D") {
-                pdb.trajectories_at_plane( tof, AXIS_X, diag_plane_z, diagnostics );
+                std::vector<trajectory_diagnostic_e> diagnostics_2d;
+                diagnostics_2d.push_back( DIAG_T );
+                diagnostics_2d.push_back( DIAG_X );  // longitudinal x
+                diagnostics_2d.push_back( DIAG_VX ); // longitudinal vx
+                diagnostics_2d.push_back( DIAG_Y );  // transverse y (or r)
+                diagnostics_2d.push_back( DIAG_VY ); // transverse vy (or vr)
+                diagnostics_2d.push_back( DIAG_MASS );
+                diagnostics_2d.push_back( DIAG_QM );
+                diagnostics_2d.push_back( DIAG_CURR );
+
+                pdb.trajectories_at_plane( tof, AXIS_X, diag_plane_z, diagnostics_2d );
+
+                // Export to tof.txt manually in 10-column format:
+                ofstream of_tof( "tof.txt" );
+                of_tof << "# time x vx y vy z vz mass q/m current\n";
+                const std::vector<double> &t_data = tof(0).data();
+                const std::vector<double> &x_data = tof(1).data();
+                const std::vector<double> &vx_data = tof(2).data();
+                const std::vector<double> &y_data = tof(3).data();
+                const std::vector<double> &vy_data = tof(4).data();
+                const std::vector<double> &mass_data = tof(5).data();
+                const std::vector<double> &qm_data = tof(6).data();
+                const std::vector<double> &curr_data = tof(7).data();
+
+                for ( uint32_t j = 0; j < tof.traj_size(); j++ ) {
+                    of_tof << t_data[j] << " " << y_data[j] << " " << vy_data[j] << " " << 0.0 << " " << 0.0 << " "
+                           << x_data[j] << " " << vx_data[j] << " " << mass_data[j] << " " << qm_data[j] << " " << curr_data[j] << "\n";
+                }
+                of_tof.close();
             } else {
+                std::vector<trajectory_diagnostic_e> diagnostics;
+                diagnostics.push_back( DIAG_T );
+                diagnostics.push_back( DIAG_X );
+                diagnostics.push_back( DIAG_VX );
+                diagnostics.push_back( DIAG_Y );
+                diagnostics.push_back( DIAG_VY );
+                diagnostics.push_back( DIAG_Z );
+                diagnostics.push_back( DIAG_VZ );
+                diagnostics.push_back( DIAG_MASS );
+                diagnostics.push_back( DIAG_QM );
+                diagnostics.push_back( DIAG_CURR );
+
                 pdb.trajectories_at_plane( tof, AXIS_Z, diag_plane_z, diagnostics );
+                tof.export_data( "tof.txt" );
             }
-            tof.export_data( "tof.txt" );
 
             // Histogram
             if (tof.diag_size() > 0 && tof.traj_size() > 0) {
@@ -1037,23 +1109,23 @@ int main( int argc, char **argv )
                     }
                 }
             } else if (domain_type == "2D") {
-                int nz_val = (int)std::round((zmax - zmin) / h_param) + 1;
+                int nx_val = (int)std::round((xmax - xmin) / h_param) + 1;
                 int ny_val = (int)std::round((ymax - ymin) / h_param) + 1;
-                for (int z_idx = 0; z_idx < nz_val; ++z_idx) {
-                    double z_pos = zmin + z_idx * h_param;
+                for (int x_idx = 0; x_idx < nx_val; ++x_idx) {
+                    double x_pos = xmin + x_idx * h_param;
                     for (int y_idx = 0; y_idx < ny_val; ++y_idx) {
                         double y_pos = ymin + y_idx * h_param;
-                        double V = epot(z_idx, y_idx, 0);
-                        double rho = scharge(z_idx, y_idx, 0);
+                        double V = epot(x_idx, y_idx, 0);
+                        double rho = scharge(x_idx, y_idx, 0);
                         Vec3D E(0.0, 0.0, 0.0);
                         try {
-                            if (z_idx > 0 && z_idx < nz_val-1 && y_idx > 0 && y_idx < ny_val-1) {
-                                E = efield(Vec3D(z_pos, y_pos, 0.0));
+                            if (x_idx > 0 && x_idx < nx_val-1 && y_idx > 0 && y_idx < ny_val-1) {
+                                E = efield(Vec3D(x_pos, y_pos, 0.0));
                             }
                         } catch(...) {}
-                        pot_file << 0.0 << " " << y_pos << " " << z_pos << " " << V << " " 
-                                 << 0.0 << " " << E[1] << " " << E[0] << "\n";
-                        rho_file << 0.0 << " " << y_pos << " " << z_pos << " " << rho << "\n";
+                        pot_file << x_pos << " " << y_pos << " " << 0.0 << " " << V << " " 
+                                 << E[0] << " " << E[1] << " " << 0.0 << "\n";
+                        rho_file << x_pos << " " << y_pos << " " << 0.0 << " " << rho << "\n";
                     }
                 }
             } else {
@@ -1091,9 +1163,9 @@ int main( int argc, char **argv )
         std::ofstream j_file("current_density.dat");
         if (j_file.is_open()) {
             j_file << "# X, Y, Z, Jx, Jy, Jz\n";
-            int nx = (domain_type == "2D_CYL" || domain_type == "2DCYL" || domain_type == "2D") ? 1 : (int)std::round((xmax - xmin) / h_param) + 1;
+            int nx = (domain_type == "2D_CYL" || domain_type == "2DCYL") ? 1 : (int)std::round((xmax - xmin) / h_param) + 1;
             int ny = (domain_type == "2D_CYL" || domain_type == "2DCYL") ? 1 : (int)std::round((ymax - ymin) / h_param) + 1;
-            int nz = (int)std::round((zmax - zmin) / h_param) + 1;
+            int nz = (domain_type == "2D") ? 1 : (int)std::round((zmax - zmin) / h_param) + 1;
 
             std::vector<std::vector<std::vector<Vec3D>>> J_grid(
                 nx, std::vector<std::vector<Vec3D>>(
@@ -1109,8 +1181,8 @@ int main( int argc, char **argv )
                     for ( size_t i = 0; i + 1 < pp.traj_size(); i++ ) {
                         const ParticlePCyl &pt1 = pp.traj( i );
                         const ParticlePCyl &pt2 = pp.traj( i+1 );
-                        double z1 = pt1[0], r1 = pt1[1];
-                        double z2 = pt2[0], r2 = pt2[1];
+                        double z1 = pt1[1], r1 = pt1[3];
+                        double z2 = pt2[1], r2 = pt2[3];
                         
                         double z_mid = (z1 + z2) / 2.0;
                         double r_mid = (r1 + r2) / 2.0;
@@ -1135,21 +1207,21 @@ int main( int argc, char **argv )
                     for ( size_t i = 0; i + 1 < pp.traj_size(); i++ ) {
                         const ParticleP2D &pt1 = pp.traj( i );
                         const ParticleP2D &pt2 = pp.traj( i+1 );
-                        double z1 = pt1[0], y1 = pt1[1];
-                        double z2 = pt2[0], y2 = pt2[1];
+                        double x1 = pt1[1], y1 = pt1[3];
+                        double x2 = pt2[1], y2 = pt2[3];
                         
-                        double z_mid = (z1 + z2) / 2.0;
+                        double x_mid = (x1 + x2) / 2.0;
                         double y_mid = (y1 + y2) / 2.0;
                         
-                        int z_idx = (int)std::round((z_mid - zmin) / h_param);
+                        int x_idx = (int)std::round((x_mid - xmin) / h_param);
                         int y_idx = (int)std::round((y_mid - ymin) / h_param);
                         
-                        if (z_idx >= 0 && z_idx < nz && y_idx >= 0 && y_idx < ny) {
-                            double dz = z2 - z1;
+                        if (x_idx >= 0 && x_idx < nx && y_idx >= 0 && y_idx < ny) {
+                            double dx = x2 - x1;
                             double dy = y2 - y1;
                             double vol = h_param * h_param * h_param;
-                            J_grid[0][y_idx][z_idx][1] += IQ * dy / vol; // y-component
-                            J_grid[0][y_idx][z_idx][2] += IQ * dz / vol; // z-component
+                            J_grid[x_idx][y_idx][0][0] += IQ * dx / vol; // x-component
+                            J_grid[x_idx][y_idx][0][1] += IQ * dy / vol; // y-component
                         }
                     }
                 }
@@ -1198,15 +1270,15 @@ int main( int argc, char **argv )
                     }
                 }
             } else if (domain_type == "2D") {
-                int nz_val = (int)std::round((zmax - zmin) / h_param) + 1;
+                int nx_val = (int)std::round((xmax - xmin) / h_param) + 1;
                 int ny_val = (int)std::round((ymax - ymin) / h_param) + 1;
-                for (int z_idx = 0; z_idx < nz_val; ++z_idx) {
-                    double z_pos = zmin + z_idx * h_param;
+                for (int x_idx = 0; x_idx < nx_val; ++x_idx) {
+                    double x_pos = xmin + x_idx * h_param;
                     for (int y_idx = 0; y_idx < ny_val; ++y_idx) {
                         double y_pos = ymin + y_idx * h_param;
-                        Vec3D J = J_grid[0][y_idx][z_idx];
-                        j_file << 0.0 << " " << y_pos << " " << z_pos << " " 
-                               << J[0] << " " << J[1] << " " << J[2] << "\n";
+                        Vec3D J = J_grid[x_idx][y_idx][0];
+                        j_file << x_pos << " " << y_pos << " " << 0.0 << " " 
+                               << J[0] << " " << J[1] << " " << 0.0 << "\n";
                     }
                 }
             } else {
@@ -1249,14 +1321,14 @@ int main( int argc, char **argv )
                     }
                 }
             } else if (domain_type == "2D") {
-                int nz_val = (int)std::round((zmax - zmin) / h_param) + 1;
+                int nx_val = (int)std::round((xmax - xmin) / h_param) + 1;
                 int ny_val = (int)std::round((ymax - ymin) / h_param) + 1;
-                for (int z_idx = 0; z_idx < nz_val; ++z_idx) {
-                    double z_pos = zmin + z_idx * h_param;
+                for (int x_idx = 0; x_idx < nx_val; ++x_idx) {
+                    double x_pos = xmin + x_idx * h_param;
                     for (int y_idx = 0; y_idx < ny_val; ++y_idx) {
                         double y_pos = ymin + y_idx * h_param;
-                        double val = tdens(z_idx, y_idx, 0);
-                        tdens_file << 0.0 << " " << y_pos << " " << z_pos << " " << val << "\n";
+                        double val = tdens(x_idx, y_idx, 0);
+                        tdens_file << x_pos << " " << y_pos << " " << 0.0 << " " << val << "\n";
                     }
                 }
             } else {

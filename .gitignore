@@ -1,5 +1,5 @@
 # =============================================================================
-# IBSimion 2.0.1.e4l - Dedicated Gitignore for F/v2.0.1.e4l-release
+# IBSimion 2.0.1.e4l - Dedicated Gitignore for E/E4/
 # =============================================================================
 
 # Ignore Python caches, logs and local virtual environments
@@ -17,38 +17,48 @@ ibsimu_wrapper
 *.a
 *.so
 
-# Ignore local execution artifacts and data dumps (Strict Block)
-*.dat
-backend/*.dat
+# Ignore local execution artifacts and data dumps
 backend/pout_*.txt
 backend/field.txt
 backend/potential.txt
+backend/charge_density.dat
+backend/potential_field.dat
+backend/trajectory_density.dat
+backend/tof.txt
+backend/tof_histo.txt
+backend/tof_out.txt
 backend/trajectories.txt
 backend/geometry.obj
 backend/config_scenario.json
-backend/current_density.dat
-
-# Block documentation walkthroughs from release
-walkthrough.md
-walkthrough*.md
-bent/teste*/walkthrough*.md
+bent/teste1/tofl203d
+bent/teste2/einzel3d
+bent/teste3/solenoid
+bent/teste4/slit3d
+bent/teste4/analysis
+bent/teste*/*.dat
+bent/teste*/*.obj
+bent/teste*/tof.txt
+bent/teste*/emit.txt
+bent/teste*/tof_histo.txt
+bent/teste*/tof_out.txt
+bent/teste*/diag.txt
+bent/teste*/*.jpg
+bent/teste*/config_scenario.json
 *.tmp
 *.log
 
-# Whitelist source files, scripts and assets to bypass root ignores
+
+# Whitelist source files, scripts and assets under E/E4/ to bypass root ignores
 !install_and_launch.sh
 !uninstall.sh
-!MANUAL.md
-!README.md
-!MANIFEST.md
-!LICENSE
+!*.md
 !frontend/*.py
 !backend/*.cpp
 !backend/Makefile
-!backend/config_scenario_test4.json
-!backend/config_pic_test.json
+!backend/config_scenario_example.json
 !bent/*.py
-!bent/teste*/*.cpp
-!bent/teste*/Makefile
-!bent/teste*/*.dxf
-!data/*.dxf
+!frontend/ibsimion_icon.png
+
+# Exception: Explicitly ignore walkthrough.md even with the markdown whitelist active
+walkthrough*.md
+

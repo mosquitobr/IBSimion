@@ -294,6 +294,28 @@ TRANSLATIONS = {
         "map_potential": "Potencial Elétrico",
         "map_rho": "Densidade de Carga (Rho) - Trajetórias",
         "map_j": "Densidade de Corrente (J) - Trajetórias",
+        "lbl_map_2d_scale": "Escala Cromática 2D:",
+        "scale_linear": "Linear",
+        "scale_log": "Logarítmica",
+        "scale_semilog": "Semi-logarítmica",
+        "scale_bilinear": "Bilinear",
+        "overlay_j": "Densidade de Corrente (J) - Trajetórias",
+        "overlay_efield": "Campo Elétrico (E)",
+        "solver_box": "Configurações de Iteração e Solver",
+        "lbl_solver_type": "Tipo de Solver:",
+        "lbl_major_cycles": "Ciclos Principais (Major Cycles):",
+        "lbl_solver_eps": "Tolerância Linear (eps):",
+        "lbl_solver_imax": "Iterações Lineares Max:",
+        "lbl_newton_eps": "Tolerância Newton (eps):",
+        "lbl_newton_imax": "Iterações Newton Max:",
+        "plasma_model_box": "Modelo Físico de Plasma (Boltzmann)",
+        "chk_plasma_model": "Ativar Modelo Boltzmann",
+        "lbl_plasma_vp": "Potencial do Plasma Vp (V):",
+        "lbl_plasma_te": "Temp. Eletrônica Te (eV):",
+        "lbl_plasma_rhoe": "Densidade Ref. rhoe (C/m³):",
+        "lbl_plasma_debye": "Comprimento Debye (m):",
+        "solver_linear": "Poisson Linear (Simples)",
+        "solver_nonlinear": "Newton-Raphson Não-Linear",
         "win_title": "IBSimion v2.0.1.e4l - Core Pipeline Estável",
         "btn_theme_dark": "Modo Escuro",
         "btn_theme_light": "Modo Claro",
@@ -307,7 +329,7 @@ TRANSLATIONS = {
         "action_manual": "Manual de Uso",
         "action_about": "Sobre",
         "tab_settings": "Configurações & Feixes",
-        "tab_solids": "Workstation 3D & Sólidos",
+        "tab_solids": "Workstation & Sólidos",
         "tab_simulate": "Simular & Otimizar",
         "tab_diagnostics": "Diagnósticos Avançados",
         "subtab_global_domain": "1. Domínio Global",
@@ -316,6 +338,8 @@ TRANSLATIONS = {
         "lbl_h": "Passo da Malha h (m):",
         "lbl_zmax": "Limite longitudinal Z max (m):",
         "lbl_rmax": "Limite radial R max (m):",
+        "lbl_origo_x": "Origem Malha Z (m):",
+        "lbl_origo_y": "Origem Malha Y (m):",
         "lbl_bfield": "Mapear Campo Magnético Externo (.TXT):",
         "chk_bfield": "Habilitar",
         "btn_browse": "Procurar...",
@@ -351,7 +375,7 @@ TRANSLATIONS = {
         "lbl_editor_translation": "Offsets de Translação (m):",
         "lbl_editor_scale": "Escala (STL/DXF):",
         "lbl_editor_layer": "Camada DXF (Layer):",
-        "lbl_editor_mapping": "Modo de Sólido 3D:",
+        "lbl_editor_mapping": "Mapeamento Transversal:",
         "btn_apply_edits": "Aplicar Edições",
         "lbl_view_mode": "Visualização:",
         "lbl_traj_color": "Colorir Trajetórias:",
@@ -493,6 +517,11 @@ TRANSLATIONS = {
         "map_potential": "Electric Potential",
         "map_rho": "Charge Density (Rho) - Trajectories",
         "map_j": "Current Density (J) - Trajectories",
+        "lbl_map_2d_scale": "2D Color Scale:",
+        "scale_linear": "Linear",
+        "scale_log": "Logarithmic",
+        "scale_semilog": "Symmetric Log",
+        "scale_bilinear": "Bilinear",
         "win_title": "IBSimion v2.0.1.e4l - Core Pipeline Stable",
         "btn_theme_dark": "Dark Mode",
         "btn_theme_light": "Light Mode",
@@ -506,7 +535,7 @@ TRANSLATIONS = {
         "action_manual": "User Manual",
         "action_about": "About",
         "tab_settings": "Settings & Beams",
-        "tab_solids": "3D Workstation & Solids",
+        "tab_solids": "Workstation & Solids",
         "tab_simulate": "Simulate & Optimize",
         "tab_diagnostics": "Advanced Diagnostics",
         "subtab_global_domain": "1. Global Domain",
@@ -515,6 +544,8 @@ TRANSLATIONS = {
         "lbl_h": "Mesh Step h (m):",
         "lbl_zmax": "Longitudinal Limit Z max (m):",
         "lbl_rmax": "Radial Limit R max (m):",
+        "lbl_origo_x": "Mesh Origin Z (m):",
+        "lbl_origo_y": "Mesh Origin Y (m):",
         "lbl_bfield": "Map External Magnetic Field (.TXT):",
         "chk_bfield": "Enable",
         "btn_browse": "Browse...",
@@ -550,7 +581,7 @@ TRANSLATIONS = {
         "lbl_editor_translation": "Translation Offsets (m):",
         "lbl_editor_scale": "Scale (STL/DXF):",
         "lbl_editor_layer": "DXF Layer:",
-        "lbl_editor_mapping": "3D Solid Mode:",
+        "lbl_editor_mapping": "Solid Mapping Mode:",
         "btn_apply_edits": "Apply Edits",
         "lbl_view_mode": "View Mode:",
         "lbl_traj_color": "Color Trajectories:",
@@ -678,7 +709,22 @@ TRANSLATIONS = {
         "overlay_potential": "Electric Potential (V)",
         "overlay_rho": "Charge Density (Rho)",
         "overlay_j": "Current Density (J)",
-        "overlay_efield": "Electric Field (E)"
+        "overlay_efield": "Electric Field (E)",
+        "solver_box": "Iteration & Solver Settings",
+        "lbl_solver_type": "Solver Type:",
+        "lbl_major_cycles": "Major Cycles (Coupling):",
+        "lbl_solver_eps": "Linear Tolerance (eps):",
+        "lbl_solver_imax": "Max Linear Iterations:",
+        "lbl_newton_eps": "Newton Tolerance (eps):",
+        "lbl_newton_imax": "Max Newton Iterations:",
+        "plasma_model_box": "Physical Plasma Model (Boltzmann)",
+        "chk_plasma_model": "Enable Boltzmann Model",
+        "lbl_plasma_vp": "Plasma Potential Vp (V):",
+        "lbl_plasma_te": "Electron Temp. Te (eV):",
+        "lbl_plasma_rhoe": "Ref. Density rhoe (C/m³):",
+        "lbl_plasma_debye": "Debye Length (m):",
+        "solver_linear": "Linear Poisson (Simple)",
+        "solver_nonlinear": "Non-Linear Newton-Raphson"
     }
 }
 
@@ -1899,6 +1945,7 @@ class MainWindow(QMainWindow):
         self.create_run_tab()
         self.create_diagnostics_tab()
         self.update_plane_z_from_mesh()
+        self.on_domain_type_changed()
 
     def create_config_tab(self):
         tab = QWidget()
@@ -1920,10 +1967,58 @@ class MainWindow(QMainWindow):
         self.txt_xmax = QLineEdit("0.035")
         self.txt_ymax = QLineEdit("0.035")
         
+        self.txt_origo_x = QLineEdit("-0.002")
+        self.txt_origo_y = QLineEdit("0.0")
+        
+        origo_val = QDoubleValidator(-10.0, 10.0, 6, self)
+        origo_val.setNotation(QDoubleValidator.StandardNotation)
+        self.txt_origo_x.setValidator(origo_val)
+        self.txt_origo_y.setValidator(origo_val)
+        
         self.chk_bfield = QCheckBox("Habilitar")
         self.txt_bfield_path = QLineEdit("field.txt")
         self.btn_browse_bfield = QPushButton("Procurar...")
         self.btn_browse_bfield.clicked.connect(self.browse_bfield_file)
+        
+        # Iteration & Solver widgets
+        self.cb_solver_type = QComboBox()
+        self.cb_solver_type.addItems(["Poisson Linear (Simples)", "Newton-Raphson Não-Linear"])
+        
+        self.spin_major_cycles = QSpinBox()
+        self.spin_major_cycles.setRange(1, 100)
+        self.spin_major_cycles.setValue(15)
+        
+        self.txt_solver_eps = QLineEdit("1e-4")
+        eps_val = QDoubleValidator(1e-12, 1.0, 12, self)
+        eps_val.setNotation(QDoubleValidator.ScientificNotation)
+        self.txt_solver_eps.setValidator(eps_val)
+        
+        self.spin_solver_imax = QSpinBox()
+        self.spin_solver_imax.setRange(100, 1000000)
+        self.spin_solver_imax.setValue(1000000)
+        
+        self.txt_newton_eps = QLineEdit("1e-4")
+        self.txt_newton_eps.setValidator(eps_val)
+        
+        self.spin_newton_imax = QSpinBox()
+        self.spin_newton_imax.setRange(1, 100)
+        self.spin_newton_imax.setValue(10)
+        
+        # Physical Plasma Model widgets
+        self.chk_plasma_model = QCheckBox("Ativar Modelo Boltzmann")
+        self.txt_plasma_vp = QLineEdit("5.0")
+        self.txt_plasma_vp.setValidator(origo_val)
+        
+        self.txt_plasma_te = QLineEdit("5.0")
+        self.txt_plasma_te.setValidator(origo_val)
+        
+        self.txt_plasma_rhoe = QLineEdit("0.0273")
+        rho_val = QDoubleValidator(0.0, 10.0, 6, self)
+        rho_val.setNotation(QDoubleValidator.StandardNotation)
+        self.txt_plasma_rhoe.setValidator(rho_val)
+        
+        self.txt_plasma_debye = QLineEdit("0.001")
+        self.txt_plasma_debye.setValidator(origo_val)
 
         # Selected beam properties widgets
         self.cb_beam_dist = QComboBox()
@@ -1990,9 +2085,67 @@ class MainWindow(QMainWindow):
         self.txt_dt.textChanged.connect(self.check_cfl)
         self.txt_h.textChanged.connect(self.update_plane_z_from_mesh)
         self.txt_zmax.textChanged.connect(self.update_plane_z_from_mesh)
+        self.txt_origo_x.textChanged.connect(self.update_plane_z_from_mesh)
+        self.txt_origo_y.textChanged.connect(self.update_plane_z_from_mesh)
+        # 1. Configurações de Iteração e Solver GroupBox
+        self.solver_box = QGroupBox("Configurações de Iteração e Solver")
+        grid_solver = QGridLayout(self.solver_box)
+        
+        self.lbl_solver_type = QLabel("Tipo de Solver:")
+        grid_solver.addWidget(self.lbl_solver_type, 0, 0)
+        grid_solver.addWidget(self.cb_solver_type, 0, 1)
+        
+        self.lbl_major_cycles = QLabel("Ciclos Principais (Major Cycles):")
+        grid_solver.addWidget(self.lbl_major_cycles, 1, 0)
+        grid_solver.addWidget(self.spin_major_cycles, 1, 1)
+        
+        self.lbl_solver_eps = QLabel("Tolerância Linear (eps):")
+        grid_solver.addWidget(self.lbl_solver_eps, 2, 0)
+        grid_solver.addWidget(self.txt_solver_eps, 2, 1)
+        
+        self.lbl_solver_imax = QLabel("Iterações Lineares Max:")
+        grid_solver.addWidget(self.lbl_solver_imax, 3, 0)
+        grid_solver.addWidget(self.spin_solver_imax, 3, 1)
+        
+        self.lbl_newton_eps = QLabel("Tolerância Newton (eps):")
+        grid_solver.addWidget(self.lbl_newton_eps, 4, 0)
+        grid_solver.addWidget(self.txt_newton_eps, 4, 1)
+        
+        self.lbl_newton_imax = QLabel("Iterações Newton Max:")
+        grid_solver.addWidget(self.lbl_newton_imax, 5, 0)
+        grid_solver.addWidget(self.spin_newton_imax, 5, 1)
+        
+        # 2. Modelo Físico de Plasma GroupBox
+        self.plasma_model_box = QGroupBox("Modelo Físico de Plasma (Boltzmann)")
+        grid_plasma = QGridLayout(self.plasma_model_box)
+        
+        grid_plasma.addWidget(self.chk_plasma_model, 0, 0, 1, 2)
+        
+        self.lbl_plasma_vp = QLabel("Potencial do Plasma Vp (V):")
+        grid_plasma.addWidget(self.lbl_plasma_vp, 1, 0)
+        grid_plasma.addWidget(self.txt_plasma_vp, 1, 1)
+        
+        self.lbl_plasma_te = QLabel("Temp. Eletrônica Te (eV):")
+        grid_plasma.addWidget(self.lbl_plasma_te, 2, 0)
+        grid_plasma.addWidget(self.txt_plasma_te, 2, 1)
+        
+        self.lbl_plasma_rhoe = QLabel("Densidade Ref. rhoe (C/m³):")
+        grid_plasma.addWidget(self.lbl_plasma_rhoe, 3, 0)
+        grid_plasma.addWidget(self.txt_plasma_rhoe, 3, 1)
+        
+        self.lbl_plasma_debye = QLabel("Comprimento Debye (m):")
+        grid_plasma.addWidget(self.lbl_plasma_debye, 4, 0)
+        grid_plasma.addWidget(self.txt_plasma_debye, 4, 1)
+        
+        # Connect change signals for toggles
+        self.cb_solver_type.currentIndexChanged.connect(self.toggle_solver_fields)
+        self.chk_plasma_model.toggled.connect(self.toggle_plasma_fields)
+        self.toggle_solver_fields() # Initial state setup
         self.update_plane_z_from_mesh()
         
         left_layout.addWidget(self.regime_box)
+        left_layout.addWidget(self.solver_box)
+        left_layout.addWidget(self.plasma_model_box)
         left_layout.addStretch()
         layout.addLayout(left_layout, 1)
         
@@ -2115,13 +2268,23 @@ class MainWindow(QMainWindow):
         grid_mesh.addWidget(self.lbl_ymax, 5, 0)
         grid_mesh.addWidget(self.txt_ymax, 5, 1)
         
+        # 6b. Origem Z min (Origo X em DXF)
+        self.lbl_origo_x = QLabel("Origem Malha Z (m):")
+        grid_mesh.addWidget(self.lbl_origo_x, 6, 0)
+        grid_mesh.addWidget(self.txt_origo_x, 6, 1)
+
+        # 6c. Origem Y min (Origo Y em DXF)
+        self.lbl_origo_y = QLabel("Origem Malha Y (m):")
+        grid_mesh.addWidget(self.lbl_origo_y, 7, 0)
+        grid_mesh.addWidget(self.txt_origo_y, 7, 1)
+        
         # 7. External Magnetic Field
         self.lbl_bfield = QLabel("Mapear Campo Magnético Externo (.TXT):")
-        grid_mesh.addWidget(self.lbl_bfield, 6, 0)
-        grid_mesh.addWidget(self.chk_bfield, 6, 1)
+        grid_mesh.addWidget(self.lbl_bfield, 8, 0)
+        grid_mesh.addWidget(self.chk_bfield, 8, 1)
         
-        grid_mesh.addWidget(self.txt_bfield_path, 7, 0)
-        grid_mesh.addWidget(self.btn_browse_bfield, 7, 1)
+        grid_mesh.addWidget(self.txt_bfield_path, 9, 0)
+        grid_mesh.addWidget(self.btn_browse_bfield, 9, 1)
         
         # Connect textChanged signals for validation and updates
         self.txt_h.textChanged.connect(self.check_cfl)
@@ -2129,6 +2292,8 @@ class MainWindow(QMainWindow):
         self.txt_rmax.textChanged.connect(self.update_plane_z_from_mesh)
         self.txt_xmax.textChanged.connect(self.update_plane_z_from_mesh)
         self.txt_ymax.textChanged.connect(self.update_plane_z_from_mesh)
+        self.txt_origo_x.textChanged.connect(self.update_plane_z_from_mesh)
+        self.txt_origo_y.textChanged.connect(self.update_plane_z_from_mesh)
         
         domain_layout.addWidget(self.mesh_box)
         domain_layout.addStretch()
@@ -2273,10 +2438,10 @@ class MainWindow(QMainWindow):
         viewport_ctrls.addWidget(self.btn_load_to_visualizer)
         
         # Amostragem de linhas em modo CW
-        self.lbl_cw_step = QLabel("Amostragem:")
+        self.lbl_cw_step = QLabel("Amostragem de Trajetórias / Trajectory Division:")
         viewport_ctrls.addWidget(self.lbl_cw_step)
         self.spin_cw_step = QSpinBox()
-        self.spin_cw_step.setRange(1, 100)
+        self.spin_cw_step.setRange(0, 100)
         self.spin_cw_step.setValue(1)
         self.spin_cw_step.valueChanged.connect(self.reload_visualizer_scene)
         viewport_ctrls.addWidget(self.spin_cw_step)
@@ -2416,7 +2581,7 @@ class MainWindow(QMainWindow):
         right_panel.addWidget(self.group_pic_anim)
         
         layout.addLayout(right_panel, 2)
-        self.tabs.addTab(tab, "Workstation 3D & Sólidos")
+        self.tabs.addTab(tab, "Workstation & Sólidos")
         
         # Initialize domain reactive states
         self.on_domain_type_changed()
@@ -2580,6 +2745,21 @@ class MainWindow(QMainWindow):
         self.cb_map_2d.currentIndexChanged.connect(self.calculate_diagnostics_plots)
         grid_map_2d.addWidget(self.cb_map_2d, 0, 1)
         
+        self.lbl_contour_levels = QLabel("Número de Isolinhas (Volts):")
+        grid_map_2d.addWidget(self.lbl_contour_levels, 1, 0)
+        self.spin_contour_levels = QSpinBox()
+        self.spin_contour_levels.setRange(5, 100)
+        self.spin_contour_levels.setValue(10)
+        self.spin_contour_levels.valueChanged.connect(self.calculate_diagnostics_plots)
+        grid_map_2d.addWidget(self.spin_contour_levels, 1, 1)
+        
+        self.lbl_map_2d_scale = QLabel("Escala Cromática 2D:")
+        grid_map_2d.addWidget(self.lbl_map_2d_scale, 2, 0)
+        self.cb_map_2d_scale = QComboBox()
+        self.cb_map_2d_scale.addItems(["Linear", "Logarítmica", "Semi-logarítmica", "Bilinear"])
+        self.cb_map_2d_scale.currentIndexChanged.connect(self.calculate_diagnostics_plots)
+        grid_map_2d.addWidget(self.cb_map_2d_scale, 2, 1)
+        
         left_layout.addWidget(self.map_2d_style_box)
         
         # Estilo & Exportação TOF
@@ -2729,33 +2909,76 @@ class MainWindow(QMainWindow):
             self.update_solids_editor_mapping_visibility()
 
     def on_domain_type_changed(self):
+        if not hasattr(self, "cb_plane_orient") or not hasattr(self, "txt_plane_z") or not hasattr(self, "table_beams"):
+            return
         idx = self.cb_domain_type.currentIndex()
         
+        # Reset label text to default translation
+        self.lbl_origo_x.setText(self.tr("lbl_origo_x"))
+        
         # Hide all by default
+        self.lbl_zmax.hide()
+        self.txt_zmax.hide()
         self.lbl_xmax.hide()
         self.txt_xmax.hide()
         self.lbl_ymax.hide()
         self.txt_ymax.hide()
         self.lbl_rmax.hide()
         self.txt_rmax.hide()
+        self.lbl_origo_x.hide()
+        self.txt_origo_x.hide()
+        self.lbl_origo_y.hide()
+        self.txt_origo_y.hide()
         
         if idx == 0:  # 3D Cartesiano Puro
             self.lbl_xmax.show()
             self.txt_xmax.show()
             self.lbl_ymax.show()
             self.txt_ymax.show()
+            self.lbl_zmax.show()
+            self.txt_zmax.show()
+            self.cb_plane_orient.setEnabled(True)
+            self.txt_plane_z.setEnabled(True)
         elif idx == 1:  # 2D Cilíndrico
             self.lbl_rmax.show()
             self.txt_rmax.show()
+            self.lbl_zmax.show()
+            self.txt_zmax.show()
+            self.cb_plane_orient.setCurrentIndex(1) # XZ (Z = longitudinal, X = radial = transverse)
+            self.cb_plane_orient.setEnabled(False)
+            self.txt_plane_z.setText("0.0")
+            self.txt_plane_z.setEnabled(False)
         elif idx == 2:  # 2D Cartesiano Estrito
+            self.lbl_xmax.show()
+            self.txt_xmax.show()
             self.lbl_ymax.show()
             self.txt_ymax.show()
+            self.lbl_origo_x.show()
+            self.txt_origo_x.show()
+            self.lbl_origo_y.show()
+            self.txt_origo_y.show()
+            self.cb_plane_orient.setCurrentIndex(0) # XY (X = longitudinal, Y = transverse)
+            self.cb_plane_orient.setEnabled(False)
+            self.txt_plane_z.setText("0.0")
+            self.txt_plane_z.setEnabled(False)
+            # Rename label to X for 2D Cartesian
+            if self.language == "PT":
+                self.lbl_origo_x.setText("Origem Malha X (m):")
+            else:
+                self.lbl_origo_x.setText("Mesh Origin X (m):")
         elif idx == 3:  # 2D Cilíndrico Especial (2DCYL)
             self.lbl_rmax.show()
             self.txt_rmax.show()
+            self.lbl_zmax.show()
+            self.txt_zmax.show()
+            self.cb_plane_orient.setCurrentIndex(1) # XZ
+            self.cb_plane_orient.setEnabled(False)
+            self.txt_plane_z.setText("0.0")
+            self.txt_plane_z.setEnabled(False)
             
         self.update_solids_editor_mapping_visibility()
         self.update_plane_z_from_mesh()
+        self.reload_beams_table()
 
     def update_solids_editor_mapping_visibility(self):
         row = getattr(self, "_current_geom_row", None)
@@ -2777,6 +3000,34 @@ class MainWindow(QMainWindow):
             self.lbl_editor_mapping.hide()
             self.editor_mapping.hide()
             self.editor_mapping.setEnabled(False)
+
+    def toggle_solver_fields(self):
+        is_nr = (self.cb_solver_type.currentIndex() == 1)
+        self.txt_newton_eps.setEnabled(is_nr)
+        self.spin_newton_imax.setEnabled(is_nr)
+        
+        if is_nr:
+            self.lbl_newton_eps.show()
+            self.txt_newton_eps.show()
+            self.lbl_newton_imax.show()
+            self.spin_newton_imax.show()
+            self.chk_plasma_model.setEnabled(True)
+        else:
+            self.lbl_newton_eps.hide()
+            self.txt_newton_eps.hide()
+            self.lbl_newton_imax.hide()
+            self.spin_newton_imax.hide()
+            self.chk_plasma_model.setChecked(False)
+            self.chk_plasma_model.setEnabled(False)
+            
+        self.toggle_plasma_fields()
+
+    def toggle_plasma_fields(self):
+        enabled = self.chk_plasma_model.isEnabled() and self.chk_plasma_model.isChecked()
+        self.txt_plasma_vp.setEnabled(enabled)
+        self.txt_plasma_te.setEnabled(enabled)
+        self.txt_plasma_rhoe.setEnabled(enabled)
+        self.txt_plasma_debye.setEnabled(enabled)
 
     def toggle_regime_fields(self):
         is_pic = (self.cb_regime.currentText() == "PIC")
@@ -2821,6 +3072,14 @@ class MainWindow(QMainWindow):
     def update_plane_z_from_mesh(self):
         if not hasattr(self, 'txt_plane_z'):
             return
+        idx = self.cb_domain_type.currentIndex()
+        if idx in [1, 2, 3]: # 2D Cartesiano ou Cilíndrico
+            self.txt_plane_z.setText("0.0")
+            self.txt_plane_z.setEnabled(False)
+            if self.cb_regime.currentText() == "PIC":
+                self.calculate_pic_suggestions()
+            return
+            
         try:
             zmax_val = self.txt_zmax.text().strip()
             h_val = self.txt_h.text().strip()
@@ -2835,6 +3094,10 @@ class MainWindow(QMainWindow):
             self.calculate_pic_suggestions()
 
     def on_plane_mode_changed(self):
+        idx = self.cb_domain_type.currentIndex()
+        if idx in [1, 2, 3]: # 2D modes
+            self.txt_plane_z.setEnabled(False)
+            return
         is_auto = (self.cb_plane_mode.currentIndex() == 0)
         self.txt_plane_z.setEnabled(not is_auto)
         if is_auto:
@@ -3086,30 +3349,45 @@ class MainWindow(QMainWindow):
     def reload_beams_table(self):
         self.table_beams.blockSignals(True)
         self.table_beams.setRowCount(len(self.beams))
+        
+        idx_domain = self.cb_domain_type.currentIndex()
+        is_3d = (idx_domain == 0)
+        is_2d_cart = (idx_domain == 2)
+        
+        from PySide6.QtCore import Qt
+        
         for idx, beam in enumerate(self.beams):
-            self.table_beams.setItem(idx, 0, QTableWidgetItem(beam["nome"]))
-            self.table_beams.setItem(idx, 1, QTableWidgetItem(str(beam["particulas"])))
+            # Helper to create/set cell with enabled state
+            def set_cell(col_idx, text, enabled=True):
+                item = QTableWidgetItem(text)
+                if not enabled:
+                    item.setFlags(Qt.NoItemFlags)
+                self.table_beams.setItem(idx, col_idx, item)
+
+            set_cell(0, beam["nome"])
+            set_cell(1, str(beam["particulas"]))
             curr_val = beam['corrente']
             curr_str = f"{curr_val:.2e}" if curr_val < 1e-2 else f"{curr_val:.3f}"
-            self.table_beams.setItem(idx, 2, QTableWidgetItem(curr_str))
-            self.table_beams.setItem(idx, 3, QTableWidgetItem(f"{beam['massa']:.4f}"))
-            self.table_beams.setItem(idx, 4, QTableWidgetItem(f"{beam['carga']:.1f}"))
-            self.table_beams.setItem(idx, 5, QTableWidgetItem(f"{beam['energy']:.1f}"))
-            self.table_beams.setItem(idx, 6, QTableWidgetItem(f"{beam['emittance']:.2e}"))
-            self.table_beams.setItem(idx, 7, QTableWidgetItem(beam["distribution"]))
+            set_cell(2, curr_str)
+            set_cell(3, f"{beam['massa']:.4f}")
+            set_cell(4, f"{beam['carga']:.1f}")
+            set_cell(5, f"{beam['energy']:.1f}")
+            set_cell(6, f"{beam['emittance']:.2e}")
+            set_cell(7, beam["distribution"])
             
             # Novas colunas
-            self.table_beams.setItem(idx, 8, QTableWidgetItem(f"{beam.get('radius', 0.0005):.5f}"))
-            self.table_beams.setItem(idx, 9, QTableWidgetItem(f"{beam.get('tam_y', 0.0005):.5f}"))
-            self.table_beams.setItem(idx, 10, QTableWidgetItem(f"{beam.get('Tt', 0.0):.4f}"))
-            self.table_beams.setItem(idx, 11, QTableWidgetItem(f"{beam.get('Tp', 0.02):.4f}"))
+            set_cell(8, f"{beam.get('radius', 0.0005):.5f}")
+            set_cell(9, f"{beam.get('tam_y', 0.0005):.5f}", enabled=(is_3d or is_2d_cart))
+            set_cell(10, f"{beam.get('Tt', 0.0):.4f}")
+            set_cell(11, f"{beam.get('Tp', 0.02):.4f}")
             
             # Colunas de origem e direção deslocadas
-            self.table_beams.setItem(idx, 12, QTableWidgetItem(f"{beam.get('orig_z', beam.get('z_start', 0.081)):.4f}"))
-            self.table_beams.setItem(idx, 13, QTableWidgetItem(f"{beam.get('orig_x', 0.0):.4f}"))
-            self.table_beams.setItem(idx, 14, QTableWidgetItem(f"{beam.get('orig_y', 0.0):.4f}"))
-            self.table_beams.setItem(idx, 15, QTableWidgetItem(f"{beam.get('dir_x', 0.0):.4f}"))
-            self.table_beams.setItem(idx, 16, QTableWidgetItem(f"{beam.get('dir_z', 1.0):.4f}"))
+            set_cell(12, f"{beam.get('orig_z', beam.get('z_start', 0.081)):.4f}", enabled=(is_3d or not is_2d_cart))
+            set_cell(13, f"{beam.get('orig_x', 0.0):.4f}", enabled=(is_3d or is_2d_cart))
+            set_cell(14, f"{beam.get('orig_y', 0.0):.4f}", enabled=(is_3d or is_2d_cart))
+            set_cell(15, f"{beam.get('dir_x', 0.0):.4f}", enabled=is_3d)
+            set_cell(16, f"{beam.get('dir_z', 1.0):.4f}", enabled=is_3d)
+
         self.table_beams.blockSignals(False)
         self.calculate_pic_suggestions()
 
@@ -3483,7 +3761,6 @@ class MainWindow(QMainWindow):
     def read_all_scenario_parameters(self):
         """Coleta todas as definições estruturadas da interface e gera os parâmetros para o cenário JSON."""
         h = float(self.txt_h.text())
-        zmax = float(self.txt_zmax.text())
         idx = self.cb_domain_type.currentIndex()
         if idx == 0:
             domain_type = "3D"
@@ -3496,18 +3773,31 @@ class MainWindow(QMainWindow):
         else:
             domain_type = "3D"
         
+        zmin = 0.0
         if domain_type == "3D":
+            zmax = float(self.txt_zmax.text())
             xmax_val = float(self.txt_xmax.text())
             ymax_val = float(self.txt_ymax.text())
             xmin, xmax = -xmax_val, xmax_val
             ymin, ymax = -ymax_val, ymax_val
             rmax = max(xmax_val, ymax_val) # fallback
         elif domain_type == "2D":
+            xmax_val = float(self.txt_xmax.text())
             ymax_val = float(self.txt_ymax.text())
-            ymin, ymax = -ymax_val, ymax_val
-            xmin, xmax = 0.0, 0.0
+            try:
+                xmin = float(self.txt_origo_x.text())
+            except ValueError:
+                xmin = -0.002
+            try:
+                ymin = float(self.txt_origo_y.text())
+            except ValueError:
+                ymin = 0.0
+            xmax = xmax_val + xmin
+            ymax = ymax_val + ymin
+            zmin, zmax = 0.0, 0.0
             rmax = ymax_val
         else: # 2D_CYL ou 2DCYL
+            zmax = float(self.txt_zmax.text())
             rmax = float(self.txt_rmax.text())
             xmin, xmax = 0.0, rmax
             ymin, ymax = 0.0, rmax
@@ -3535,7 +3825,7 @@ class MainWindow(QMainWindow):
             "xmax": xmax,
             "ymin": ymin,
             "ymax": ymax,
-            "zmin": 0.0,
+            "zmin": zmin,
             "zmax": zmax,
             "rmax": rmax if (domain_type in ["2D_CYL", "2DCYL"]) else 0.0,
             "geometries": wsl_geoms,
@@ -3557,6 +3847,49 @@ class MainWindow(QMainWindow):
             "generate_jpg": 0,
             "interactive_plot": 0
         }
+        
+        # Export solver and physical plasma model settings
+        params["solver_type"] = self.cb_solver_type.currentText()
+        params["iterations"] = self.spin_major_cycles.value()
+        
+        try:
+            params["solver_eps"] = float(self.txt_solver_eps.text())
+        except ValueError:
+            params["solver_eps"] = 1e-5
+            
+        params["solver_imax"] = self.spin_solver_imax.value()
+        
+        try:
+            params["newton_eps"] = float(self.txt_newton_eps.text())
+        except ValueError:
+            params["newton_eps"] = 1e-4
+            
+        params["newton_imax"] = self.spin_newton_imax.value()
+        
+        params["plasma_enabled"] = self.chk_plasma_model.isChecked()
+        
+        try:
+            params["plasma_voltage"] = float(self.txt_plasma_vp.text())
+        except ValueError:
+            params["plasma_voltage"] = 5.0
+            
+        try:
+            params["plasma_Te"] = float(self.txt_plasma_te.text())
+        except ValueError:
+            params["plasma_Te"] = 5.0
+            
+        try:
+            params["plasma_rhoe"] = float(self.txt_plasma_rhoe.text())
+        except ValueError:
+            params["plasma_rhoe"] = 0.0273
+            
+        try:
+            params["plasma_debye"] = float(self.txt_plasma_debye.text())
+        except ValueError:
+            params["plasma_debye"] = 0.001
+            
+        params["plasma_axis"] = "X" if domain_type == "2D" else "Z"
+        
         return params
 
     def run_simple_simulation(self):
@@ -3571,7 +3904,6 @@ class MainWindow(QMainWindow):
         # Validar tamanho da malha antes de rodar
         try:
             h = float(self.txt_h.text())
-            zmax = float(self.txt_zmax.text())
             idx = self.cb_domain_type.currentIndex()
             if idx == 0:
                 domain_type = "3D"
@@ -3585,17 +3917,20 @@ class MainWindow(QMainWindow):
                 domain_type = "3D"
             
             if domain_type == "3D":
+                zmax = float(self.txt_zmax.text())
                 xmax_val = float(self.txt_xmax.text())
                 ymax_val = float(self.txt_ymax.text())
                 nx = int(round((2.0 * xmax_val) / h)) + 1
                 ny = int(round((2.0 * ymax_val) / h)) + 1
                 nz = int(round(zmax / h)) + 1
             elif domain_type == "2D":
+                xmax_val = float(self.txt_xmax.text())
                 ymax_val = float(self.txt_ymax.text())
-                nx = int(round(zmax / h)) + 1
-                ny = int(round((2.0 * ymax_val) / h)) + 1
+                nx = int(round(xmax_val / h)) + 1
+                ny = int(round(ymax_val / h)) + 1
                 nz = 1
             else: # 2D_CYL ou 2DCYL
+                zmax = float(self.txt_zmax.text())
                 rmax_val = float(self.txt_rmax.text())
                 nx = int(round(zmax / h)) + 1
                 ny = int(round(rmax_val / h)) + 1
@@ -3644,7 +3979,6 @@ class MainWindow(QMainWindow):
         # Validar tamanho da malha antes de rodar
         try:
             h = float(self.txt_h.text())
-            zmax = float(self.txt_zmax.text())
             idx = self.cb_domain_type.currentIndex()
             if idx == 0:
                 domain_type = "3D"
@@ -3658,17 +3992,20 @@ class MainWindow(QMainWindow):
                 domain_type = "3D"
             
             if domain_type == "3D":
+                zmax = float(self.txt_zmax.text())
                 xmax_val = float(self.txt_xmax.text())
                 ymax_val = float(self.txt_ymax.text())
                 nx = int(round((2.0 * xmax_val) / h)) + 1
                 ny = int(round((2.0 * ymax_val) / h)) + 1
                 nz = int(round(zmax / h)) + 1
             elif domain_type == "2D":
+                xmax_val = float(self.txt_xmax.text())
                 ymax_val = float(self.txt_ymax.text())
-                nx = int(round(zmax / h)) + 1
-                ny = int(round((2.0 * ymax_val) / h)) + 1
+                nx = int(round(xmax_val / h)) + 1
+                ny = int(round(ymax_val / h)) + 1
                 nz = 1
             else: # 2D_CYL ou 2DCYL
+                zmax = float(self.txt_zmax.text())
                 rmax_val = float(self.txt_rmax.text())
                 nx = int(round(zmax / h)) + 1
                 ny = int(round(rmax_val / h)) + 1
@@ -3865,9 +4202,19 @@ class MainWindow(QMainWindow):
         regime = self.cb_regime.currentText()
         self.pyvista_widget.pic_mode = (regime == "PIC")
         
-        # Loads geometry obj
         obj_path = os.path.join(self.backend_dir, "geometry.obj")
-        self.pyvista_widget.load_geometry_data(self.geometries, obj_path)
+        idx = self.cb_domain_type.currentIndex()
+        if idx == 0:
+            domain_type = "3D"
+        elif idx == 1:
+            domain_type = "2D_CYL"
+        elif idx == 2:
+            domain_type = "2D"
+        elif idx == 3:
+            domain_type = "2DCYL"
+        else:
+            domain_type = "3D"
+        self.pyvista_widget.load_geometry_data(self.geometries, obj_path, domain_type=domain_type)
         
         if regime == "CW":
             self.group_pic_anim.setEnabled(True)
@@ -4282,7 +4629,13 @@ class MainWindow(QMainWindow):
             coord_v = []
             weights = []
             
-            if orient == 0:  # XY (Z = coord)
+            domain_type = params.get("domain_type", "3D")
+            if domain_type == "2D" and orient == 0:
+                h_range = [xmin, xmax]
+                v_range = [ymin, ymax]
+                nbins_h = max(10, int((xmax - xmin) / h))
+                nbins_v = max(10, int((ymax - ymin) / h))
+            elif orient == 0:  # XY (Z = coord)
                 h_range = [xmin, xmax]
                 v_range = [ymin, ymax]
                 nbins_h = max(10, int((xmax - xmin) / h))
@@ -4642,6 +4995,56 @@ class MainWindow(QMainWindow):
         # 2. Slice potential and charge densities 2D contours
         orient = self.cb_plane_orient.currentIndex()
         map_type = self.cb_map_2d.currentIndex()
+        
+        # Resolve automatic plane Z coordinate for 3D/Cylindrical domains
+        domain_idx = self.cb_domain_type.currentIndex()
+        if domain_idx in [0, 1, 3]:  # 3D or Cylindrical modes
+            if self.cb_plane_mode.currentIndex() == 0:  # Automático (Detector)
+                detector_z = 0.0
+                # A. Try to read from completed TOF data (intersection of macroparticles)
+                tof_data = self.simulation_cache.get("tof")
+                if tof_data is not None and tof_data.ndim == 2 and tof_data.shape[1] > 5 and len(tof_data) > 0:
+                    detector_z = float(np.mean(tof_data[:, 5]))
+                else:
+                    # B. Check for TOFL20 benchmark specific geometries/coordinates
+                    is_tofl20 = False
+                    for geom in self.geometries:
+                        if "tofl20" in geom.get("file_path", "").lower() or "tofl20" in geom.get("name", "").lower():
+                            is_tofl20 = True
+                            break
+                    if is_tofl20:
+                        detector_z = 0.3549
+                    else:
+                        # C. Scan geometries for translations containing "detector", etc.
+                        found_geom = False
+                        for geom in self.geometries:
+                            name_lower = geom["name"].lower()
+                            if any(k in name_lower for k in ["detector", "detions", "det_ion", "deteletrons"]):
+                                if geom["translation"][2] > 0.0:
+                                    detector_z = geom["translation"][2]
+                                    found_geom = True
+                                    break
+                        # D. Fallback to zmax - h
+                        if not found_geom:
+                            try:
+                                zmax_val = float(self.txt_zmax.text())
+                                h_val = float(self.txt_h.text())
+                                detector_z = zmax_val - h_val
+                            except Exception:
+                                detector_z = 0.0
+                
+                # Clip detector_z to active grid bounds [0, zmax]
+                try:
+                    zmax_val = float(self.txt_zmax.text())
+                    if detector_z > zmax_val:
+                        detector_z = zmax_val - 1e-4
+                    if detector_z < 0.0:
+                        detector_z = 0.0
+                except Exception:
+                    pass
+                
+                self.txt_plane_z.setText(f"{detector_z:.4f}")
+
         coord_val = 0.0
         try:
             coord_val = float(self.txt_plane_z.text())
@@ -4717,7 +5120,13 @@ class MainWindow(QMainWindow):
                     coord_v = []
                     weights = []
                     
-                    if orient == 0:  # XY (Z = coord)
+                    domain_type = params.get("domain_type", "3D")
+                    if domain_type == "2D" and orient == 0:
+                        h_range = [zmin, zmax]
+                        v_range = [ymin, ymax]
+                        nbins_h = max(10, int((zmax - zmin) / h))
+                        nbins_v = max(10, int((ymax - ymin) / h))
+                    elif orient == 0:  # XY (Z = coord)
                         h_range = [xmin, xmax]
                         v_range = [ymin, ymax]
                         nbins_h = max(10, int((xmax - xmin) / h))
@@ -4846,29 +5255,131 @@ class MainWindow(QMainWindow):
                 Z_grid, X_grid = np.meshgrid(zs * 1000, xs * 1000) # scale to mm
                 
                 im = None
-                if rho_matrix is not None:
+                scale_idx = self.cb_map_2d_scale.currentIndex()
+                norm = None
+                
+                # Resolve active data matrix to apply scaling dynamically
+                active_matrix = None
+                if map_type == 0 and V_matrix is not None:
+                    active_matrix = V_matrix
+                elif rho_matrix is not None:
+                    active_matrix = rho_matrix
+                
+                if active_matrix is not None:
                     # Sanitize NaNs and Infs
-                    rho_matrix = np.nan_to_num(rho_matrix, nan=0.0, posinf=0.0, neginf=0.0)
+                    active_matrix = np.nan_to_num(active_matrix, nan=0.0, posinf=0.0, neginf=0.0)
+                    vmin = float(np.nanmin(active_matrix))
+                    vmax = float(np.nanmax(active_matrix))
                     
-                    # Calculate robust dynamic bounds for J/Rho
-                    vmin = float(np.nanmin(rho_matrix))
-                    vmax = float(np.nanmax(rho_matrix))
-                    if vmin == vmax:
-                        vmin = 0.0
-                        vmax = max(1.0, vmax)
+                    if scale_idx == 1:  # Logarithmic
+                        from matplotlib.colors import LogNorm
+                        # Apply absolute value and floor to prevent <= 0 values (clipping)
+                        data_plot = np.abs(active_matrix)
+                        floor_val = 1e-3 if map_type == 0 else 1e-12
+                        data_plot = np.maximum(data_plot, floor_val)
+                        vmin_l = float(np.min(data_plot))
+                        vmax_l = float(np.max(data_plot))
+                        if vmin_l == vmax_l:
+                            vmax_l = vmin_l + 1.0
+                        norm = LogNorm(vmin=vmin_l, vmax=vmax_l)
+                        active_matrix = data_plot
                         
+                    elif scale_idx == 2:  # Symmetric Log (Semi-logarítmica)
+                        from matplotlib.colors import SymLogNorm
+                        max_abs = max(abs(vmin), abs(vmax))
+                        linthresh = max(1e-3 if map_type == 0 else 1e-12, max_abs * 0.01)
+                        if vmin == vmax:
+                            vmax = vmin + 1.0
+                        norm = SymLogNorm(linthresh=linthresh, linscale=1.0, vmin=vmin, vmax=vmax, base=10)
+                        
+                    elif scale_idx == 3:  # Bilinear (Diverging)
+                        from matplotlib.colors import TwoSlopeNorm
+                        if vmin < 0 < vmax:
+                            vcenter = 0.0
+                        else:
+                            vcenter = (vmin + vmax) / 2.0
+                        if vmin == vmax:
+                            vmax = vmin + 1.0
+                            vcenter = (vmin + vmax) / 2.0
+                        norm = TwoSlopeNorm(vcenter=vcenter, vmin=vmin, vmax=vmax)
+
+                # Draw filled contours or colormesh
+                if map_type == 0 and V_matrix is not None:
+                    im = self.canvas_contours.axes.contourf(
+                        Z_grid, X_grid, active_matrix, levels=self.spin_contour_levels.value(), cmap='viridis', alpha=0.6, norm=norm
+                    )
+                elif rho_matrix is not None:
                     im = self.canvas_contours.axes.pcolormesh(
-                        Z_grid, X_grid, rho_matrix, cmap='plasma', shading='auto', alpha=0.6,
-                        vmin=vmin, vmax=vmax
+                        Z_grid, X_grid, active_matrix, cmap='plasma', shading='auto', alpha=0.6, norm=norm
                     )
                 
                 if V_matrix is not None:
                     contours = self.canvas_contours.axes.contour(
-                        Z_grid, X_grid, V_matrix, levels=15, colors=cols["contour_color"], linewidths=0.7, alpha=0.8
+                        Z_grid, X_grid, V_matrix, levels=self.spin_contour_levels.value(), colors=cols["contour_color"], linewidths=0.7, alpha=0.8
                     )
                     self.canvas_contours.axes.clabel(contours, inline=True, fontsize=8, fmt="%d V", colors=cols["fg"])
                 
-                if orient == 0:
+                # Plot geometry outlines on Matplotlib contours if they exist
+                for geom in self.geometries:
+                    file_path = geom.get("file_path", "")
+                    if file_path.lower().endswith(".dxf"):
+                        abs_path = resolve_path(file_path)
+                        if abs_path and os.path.exists(abs_path):
+                            try:
+                                import ezdxf
+                                doc = ezdxf.readfile(abs_path)
+                                msp = doc.modelspace()
+                                layer = geom.get("layer", "")
+                                query_str = f'*[layer=="{layer}"]' if layer else '*'
+                                entities = msp.query(query_str)
+                                scale = geom.get("scale", 1.0) * 1000.0 # to mm
+                                tx, ty, tz = geom.get("translation", [0.0, 0.0, 0.0])
+                                tx_mm = tx * 1000.0
+                                ty_mm = ty * 1000.0
+                                
+                                for entity in entities:
+                                    dxftype = entity.dxftype()
+                                    if dxftype == 'LINE':
+                                        start = entity.dxf.start
+                                        end = entity.dxf.end
+                                        x_pts = [start.x * scale + tx_mm, end.x * scale + tx_mm]
+                                        y_pts = [start.y * scale + ty_mm, end.y * scale + ty_mm]
+                                        self.canvas_contours.axes.plot(x_pts, y_pts, color='#94A3B8', linewidth=1.5, alpha=0.9)
+                                    elif dxftype in ['LWPOLYLINE', 'POLYLINE']:
+                                        points = list(entity.points())
+                                        x_pts = [p[0] * scale + tx_mm for p in points]
+                                        y_pts = [p[1] * scale + ty_mm for p in points]
+                                        if entity.is_closed:
+                                            x_pts.append(x_pts[0])
+                                            y_pts.append(y_pts[0])
+                                        self.canvas_contours.axes.plot(x_pts, y_pts, color='#94A3B8', linewidth=1.5, alpha=0.9)
+                                    elif dxftype == 'ARC':
+                                        center = entity.dxf.center
+                                        radius = entity.dxf.radius
+                                        start_angle = entity.dxf.start_angle
+                                        end_angle = entity.dxf.end_angle
+                                        if end_angle < start_angle:
+                                            end_angle += 360.0
+                                        angles = np.linspace(np.radians(start_angle), np.radians(end_angle), 32)
+                                        x_pts = [(center.x + radius * np.cos(a)) * scale + tx_mm for a in angles]
+                                        y_pts = [(center.y + radius * np.sin(a)) * scale + ty_mm for a in angles]
+                                        self.canvas_contours.axes.plot(x_pts, y_pts, color='#94A3B8', linewidth=1.5, alpha=0.9)
+                                    elif dxftype == 'CIRCLE':
+                                        center = entity.dxf.center
+                                        radius = entity.dxf.radius
+                                        angles = np.linspace(0, 2*np.pi, 64)
+                                        x_pts = [(center.x + radius * np.cos(a)) * scale + tx_mm for a in angles]
+                                        y_pts = [(center.y + radius * np.sin(a)) * scale + ty_mm for a in angles]
+                                        self.canvas_contours.axes.plot(x_pts, y_pts, color='#94A3B8', linewidth=1.5, alpha=0.9)
+                            except Exception as ex:
+                                print(f"Error plotting DXF outline on Matplotlib contours: {ex}")
+                
+                domain_type = params.get("domain_type", "3D")
+                if domain_type == "2D" and orient == 0:
+                    xlabel = "X (mm)"
+                    ylabel = "Y (mm)"
+                    t_title = "XY - Equipotentials (V)" if self.language == "EN" else "XY - Equipotenciais (V)"
+                elif orient == 0:
                     xlabel = "X (mm)"
                     ylabel = "Y (mm)"
                     t_title = "XY - Equipotentials (V)" if self.language == "EN" else "XY - Equipotenciais (V)"
@@ -4885,6 +5396,27 @@ class MainWindow(QMainWindow):
                 self.canvas_contours.axes.set_ylabel(ylabel, color=cols["fg"])
                 self.canvas_contours.axes.set_title(t_title, color=cols["title"])
                 self.canvas_contours.axes.grid(True, color=cols["grid"])
+                
+                # Explicitly set dynamic plot axes limits based on UI simulation bounds
+                xmin = params.get("xmin", -0.035)
+                xmax = params.get("xmax", 0.035)
+                ymin = params.get("ymin", -0.035)
+                ymax = params.get("ymax", 0.035)
+                zmin = params.get("zmin", 0.0)
+                zmax = params.get("zmax", 0.36)
+                
+                if domain_type == "2D" and orient == 0:
+                    self.canvas_contours.axes.set_xlim(xmin * 1000.0, xmax * 1000.0)
+                    self.canvas_contours.axes.set_ylim(ymin * 1000.0, ymax * 1000.0)
+                elif orient == 0:  # XY (Z = coord)
+                    self.canvas_contours.axes.set_xlim(xmin * 1000.0, xmax * 1000.0)
+                    self.canvas_contours.axes.set_ylim(ymin * 1000.0, ymax * 1000.0)
+                elif orient == 1:  # XZ (Y = coord)
+                    self.canvas_contours.axes.set_xlim(zmin * 1000.0, zmax * 1000.0)
+                    self.canvas_contours.axes.set_ylim(xmin * 1000.0, xmax * 1000.0)
+                else:  # YZ (X = coord)
+                    self.canvas_contours.axes.set_xlim(zmin * 1000.0, zmax * 1000.0)
+                    self.canvas_contours.axes.set_ylim(ymin * 1000.0, ymax * 1000.0)
                 
                 if im is not None:
                     if map_type == 0:
@@ -5021,13 +5553,27 @@ class MainWindow(QMainWindow):
                 
             bfield_clean = f"./data/{os.path.basename(self.txt_bfield_path.text())}" if self.txt_bfield_path.text() else ""
             
+            idx = self.cb_domain_type.currentIndex()
+            if idx == 0:
+                domain_type_val = "3D"
+            elif idx == 1:
+                domain_type_val = "2D_CYL"
+            elif idx == 2:
+                domain_type_val = "2D"
+            elif idx == 3:
+                domain_type_val = "2DCYL"
+            else:
+                domain_type_val = "3D"
+                
             project_data = {
-                "domain_type": "3D" if self.cb_domain_type.currentIndex() == 0 else "2D_CYL",
+                "domain_type": domain_type_val,
                 "h": self.txt_h.text(),
                 "zmax": self.txt_zmax.text(),
                 "rmax": self.txt_rmax.text(),
                 "xmax": self.txt_xmax.text(),
                 "ymax": self.txt_ymax.text(),
+                "origo_x": self.txt_origo_x.text(),
+                "origo_y": self.txt_origo_y.text(),
                 "bfield_enabled": self.chk_bfield.isChecked(),
                 "bfield_path": bfield_clean,
                 "regime": self.cb_regime.currentText(),
@@ -5048,7 +5594,19 @@ class MainWindow(QMainWindow):
                 "plane_z": self.txt_plane_z.text(),
                 "plane_mode": self.cb_plane_mode.currentIndex(),
                 "plane_orient": self.cb_plane_orient.currentIndex(),
-                "map_2d": self.cb_map_2d.currentIndex()
+                "map_2d": self.cb_map_2d.currentIndex(),
+                "map_2d_scale": self.cb_map_2d_scale.currentIndex(),
+                "solver_type": self.cb_solver_type.currentText(),
+                "major_cycles": self.spin_major_cycles.value(),
+                "solver_eps": self.txt_solver_eps.text(),
+                "solver_imax": self.spin_solver_imax.value(),
+                "newton_eps": self.txt_newton_eps.text(),
+                "newton_imax": self.spin_newton_imax.value(),
+                "plasma_enabled": self.chk_plasma_model.isChecked(),
+                "plasma_voltage": self.txt_plasma_vp.text(),
+                "plasma_Te": self.txt_plasma_te.text(),
+                "plasma_rhoe": self.txt_plasma_rhoe.text(),
+                "plasma_debye": self.txt_plasma_debye.text()
             }
             
             with open(file_path, "w", encoding="utf-8") as f:
@@ -5275,6 +5833,15 @@ class MainWindow(QMainWindow):
         self.lbl_h.setText(self.tr("lbl_h"))
         self.lbl_zmax.setText(self.tr("lbl_zmax"))
         self.lbl_rmax.setText(self.tr("lbl_rmax"))
+        idx = self.cb_domain_type.currentIndex()
+        if idx == 2:
+            if self.language == "PT":
+                self.lbl_origo_x.setText("Origem Malha X (m):")
+            else:
+                self.lbl_origo_x.setText("Mesh Origin X (m):")
+        else:
+            self.lbl_origo_x.setText(self.tr("lbl_origo_x"))
+        self.lbl_origo_y.setText(self.tr("lbl_origo_y"))
         self.lbl_bfield.setText(self.tr("lbl_bfield"))
         self.chk_bfield.setText(self.tr("chk_bfield"))
         self.btn_browse_bfield.setText(self.tr("btn_browse"))
@@ -5283,6 +5850,31 @@ class MainWindow(QMainWindow):
         self.lbl_regime.setText(self.tr("lbl_regime"))
         self.lbl_dt.setText(self.tr("lbl_dt"))
         self.lbl_tfinal.setText(self.tr("lbl_tfinal"))
+        
+        self.solver_box.setTitle(self.tr("solver_box"))
+        self.lbl_solver_type.setText(self.tr("lbl_solver_type"))
+        self.lbl_major_cycles.setText(self.tr("lbl_major_cycles"))
+        self.lbl_solver_eps.setText(self.tr("lbl_solver_eps"))
+        self.lbl_solver_imax.setText(self.tr("lbl_solver_imax"))
+        self.lbl_newton_eps.setText(self.tr("lbl_newton_eps"))
+        self.lbl_newton_imax.setText(self.tr("lbl_newton_imax"))
+        
+        solver_type_idx = self.cb_solver_type.currentIndex()
+        self.cb_solver_type.blockSignals(True)
+        self.cb_solver_type.clear()
+        self.cb_solver_type.addItems([
+            self.tr("solver_linear"),
+            self.tr("solver_nonlinear")
+        ])
+        self.cb_solver_type.setCurrentIndex(solver_type_idx)
+        self.cb_solver_type.blockSignals(False)
+        
+        self.plasma_model_box.setTitle(self.tr("plasma_model_box"))
+        self.chk_plasma_model.setText(self.tr("chk_plasma_model"))
+        self.lbl_plasma_vp.setText(self.tr("lbl_plasma_vp"))
+        self.lbl_plasma_te.setText(self.tr("lbl_plasma_te"))
+        self.lbl_plasma_rhoe.setText(self.tr("lbl_plasma_rhoe"))
+        self.lbl_plasma_debye.setText(self.tr("lbl_plasma_debye"))
         
         self.beams_box.setTitle(self.tr("beams_box"))
         self.btn_add_beam.setText(self.tr("btn_add_beam"))
@@ -5403,6 +5995,19 @@ class MainWindow(QMainWindow):
         self.cb_map_2d.addItems([self.tr("map_potential"), self.tr("map_rho"), self.tr("map_j")])
         self.cb_map_2d.setCurrentIndex(idx_map if idx_map >= 0 else 0)
         self.cb_map_2d.blockSignals(False)
+        
+        self.lbl_map_2d_scale.setText(self.tr("lbl_map_2d_scale"))
+        self.cb_map_2d_scale.blockSignals(True)
+        idx_scale = self.cb_map_2d_scale.currentIndex()
+        self.cb_map_2d_scale.clear()
+        self.cb_map_2d_scale.addItems([
+            self.tr("scale_linear"),
+            self.tr("scale_log"),
+            self.tr("scale_semilog"),
+            self.tr("scale_bilinear")
+        ])
+        self.cb_map_2d_scale.setCurrentIndex(idx_scale if idx_scale >= 0 else 0)
+        self.cb_map_2d_scale.blockSignals(False)
         
         self.cb_overlay_field.blockSignals(True)
         idx_overlay = self.cb_overlay_field.currentIndex()
@@ -5692,6 +6297,21 @@ class MainWindow(QMainWindow):
             if "xmax" in project_data: self.txt_xmax.setText(str(project_data["xmax"]))
             if "ymax" in project_data: self.txt_ymax.setText(str(project_data["ymax"]))
             
+            dtype = project_data.get("domain_type", "3D")
+            if "origo_x" in project_data:
+                self.txt_origo_x.setText(str(project_data["origo_x"]))
+            elif "zmin" in project_data:
+                self.txt_origo_x.setText(str(project_data["zmin"]))
+            else:
+                self.txt_origo_x.setText("-0.002" if dtype == "2D" else "0.0")
+                
+            if "origo_y" in project_data:
+                self.txt_origo_y.setText(str(project_data["origo_y"]))
+            elif "ymin" in project_data:
+                self.txt_origo_y.setText(str(project_data["ymin"]))
+            else:
+                self.txt_origo_y.setText("0.0")
+            
             self.on_domain_type_changed()
             
             if "bfield_enabled" in project_data: self.chk_bfield.setChecked(bool(project_data["bfield_enabled"]))
@@ -5719,6 +6339,70 @@ class MainWindow(QMainWindow):
                 self.cb_map_2d.setCurrentIndex(int(project_data["map_2d"]))
             else:
                 self.cb_map_2d.setCurrentIndex(0) # Default to Potential Map
+                
+            if "map_2d_scale" in project_data:
+                self.cb_map_2d_scale.setCurrentIndex(int(project_data["map_2d_scale"]))
+            else:
+                self.cb_map_2d_scale.setCurrentIndex(0) # Default to Linear
+                
+            if "solver_type" in project_data:
+                self.cb_solver_type.setCurrentText(str(project_data["solver_type"]))
+            else:
+                self.cb_solver_type.setCurrentIndex(0)
+                
+            if "major_cycles" in project_data:
+                self.spin_major_cycles.setValue(int(project_data["major_cycles"]))
+            elif "iterations" in project_data:
+                self.spin_major_cycles.setValue(int(project_data["iterations"]))
+            else:
+                self.spin_major_cycles.setValue(15)
+                
+            if "solver_eps" in project_data:
+                self.txt_solver_eps.setText(str(project_data["solver_eps"]))
+            else:
+                self.txt_solver_eps.setText("1e-5")
+                
+            if "solver_imax" in project_data:
+                self.spin_solver_imax.setValue(int(project_data["solver_imax"]))
+            else:
+                self.spin_solver_imax.setValue(100000)
+                
+            if "newton_eps" in project_data:
+                self.txt_newton_eps.setText(str(project_data["newton_eps"]))
+            else:
+                self.txt_newton_eps.setText("1e-4")
+                
+            if "newton_imax" in project_data:
+                self.spin_newton_imax.setValue(int(project_data["newton_imax"]))
+            else:
+                self.spin_newton_imax.setValue(10)
+                
+            if "plasma_enabled" in project_data:
+                self.chk_plasma_model.setChecked(bool(project_data["plasma_enabled"]))
+            else:
+                self.chk_plasma_model.setChecked(False)
+                
+            if "plasma_voltage" in project_data:
+                self.txt_plasma_vp.setText(str(project_data["plasma_voltage"]))
+            else:
+                self.txt_plasma_vp.setText("5.0")
+                
+            if "plasma_Te" in project_data:
+                self.txt_plasma_te.setText(str(project_data["plasma_Te"]))
+            else:
+                self.txt_plasma_te.setText("5.0")
+                
+            if "plasma_rhoe" in project_data:
+                self.txt_plasma_rhoe.setText(str(project_data["plasma_rhoe"]))
+            else:
+                self.txt_plasma_rhoe.setText("0.0273")
+                
+            if "plasma_debye" in project_data:
+                self.txt_plasma_debye.setText(str(project_data["plasma_debye"]))
+            else:
+                self.txt_plasma_debye.setText("0.001")
+                
+            self.toggle_solver_fields()
             
             self.geometries = project_data.get("geometries", [])
             for geom in self.geometries:

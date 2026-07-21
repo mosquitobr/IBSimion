@@ -30,6 +30,93 @@ def resolve_path(path):
             return os.path.abspath(data_path)
             
     return os.path.abspath(path)
+            
+def load_dxf_entities_as_mesh(dxf_path, layer_name, scale=1.0, translation=[0.0, 0.0, 0.0], domain_type="3D"):
+    import ezdxf
+    try:
+        doc = ezdxf.readfile(dxf_path)
+        msp = doc.modelspace()
+        
+        # Query entities in the layer
+        query_str = f'*[layer=="{layer_name}"]' if layer_name else '*'
+        entities = msp.query(query_str)
+        
+        lines_pts = []
+        for entity in entities:
+            dxftype = entity.dxftype()
+            if dxftype == 'LINE':
+                start = entity.dxf.start
+                end = entity.dxf.end
+                lines_pts.append((start, end))
+            elif dxftype == 'LWPOLYLINE' or dxftype == 'POLYLINE':
+                points = list(entity.points()) # list of (x, y, [z])
+                for i in range(len(points) - 1):
+                    lines_pts.append((points[i], points[i+1]))
+                if entity.is_closed:
+                    lines_pts.append((points[-1], points[0]))
+            elif dxftype == 'ARC':
+                # Approximate arc
+                center = entity.dxf.center
+                radius = entity.dxf.radius
+                start_angle = entity.dxf.start_angle
+                end_angle = entity.dxf.end_angle
+                if end_angle < start_angle:
+                    end_angle += 360.0
+                num_segments = 16
+                angles = np.linspace(np.radians(start_angle), np.radians(end_angle), num_segments + 1)
+                arc_pts = []
+                for angle in angles:
+                    x = center.x + radius * np.cos(angle)
+                    y = center.y + radius * np.sin(angle)
+                    arc_pts.append((x, y, center.z))
+                for i in range(len(arc_pts) - 1):
+                    lines_pts.append((arc_pts[i], arc_pts[i+1]))
+            elif dxftype == 'CIRCLE':
+                center = entity.dxf.center
+                radius = entity.dxf.radius
+                num_segments = 32
+                angles = np.linspace(0, 2 * np.pi, num_segments + 1)
+                circle_pts = []
+                for angle in angles:
+                    x = center.x + radius * np.cos(angle)
+                    y = center.y + radius * np.sin(angle)
+                    circle_pts.append((x, y, center.z))
+                for i in range(len(circle_pts) - 1):
+                    lines_pts.append((circle_pts[i], circle_pts[i+1]))
+                    
+        if not lines_pts:
+            return None
+            
+        pv_lines = []
+        for start, end in lines_pts:
+            p1_raw = np.array([start[0], start[1], start[2] if len(start) > 2 else 0.0]) * scale
+            p2_raw = np.array([end[0], end[1], end[2] if len(end) > 2 else 0.0]) * scale
+            
+            # Map coordinates based on domain_type
+            if domain_type == "2D":
+                # DXF X -> PyVista X (longitudinal)
+                # DXF Y -> PyVista Y (transverse)
+                # PyVista Z = 0.0
+                p1 = np.array([p1_raw[0] + translation[0], p1_raw[1] + translation[1], 0.0])
+                p2 = np.array([p2_raw[0] + translation[0], p2_raw[1] + translation[1], 0.0])
+            elif domain_type in ["2D_CYL", "2DCYL"]:
+                # DXF X -> PyVista Z (longitudinal)
+                # DXF Y -> PyVista X (transverse/radial)
+                # PyVista Y = 0.0
+                p1 = np.array([p1_raw[1] + translation[1], 0.0, p1_raw[0] + translation[0]])
+                p2 = np.array([p2_raw[1] + translation[1], 0.0, p2_raw[0] + translation[0]])
+            else:
+                p1 = p1_raw + np.array(translation)
+                p2 = p2_raw + np.array(translation)
+                
+            line = pv.Line(p1, p2)
+            pv_lines.append(line)
+            
+        if pv_lines:
+            return pv.merge(pv_lines)
+    except Exception as e:
+        print(f"Error loading DXF layer {layer_name} as mesh: {e}")
+    return None
 
 class PyVistaWidget(QWidget):
     def __init__(self, parent=None):
@@ -146,20 +233,25 @@ class PyVistaWidget(QWidget):
         self.obj_path_cache = None
         self.loaded_meshes = []
 
-    def load_geometry_data(self, geometries_list, obj_path=None):
+    def load_geometry_data(self, geometries_list, obj_path=None, domain_type=None):
         """Carrega e renderiza STL nativamente em alta resolução, e usa OBJ de fallback para DXF/malhas gerais."""
         # Salva em cache para re-renderização sob troca de tema
         self.geometries_cache = geometries_list
         self.obj_path_cache = obj_path
+        if domain_type is not None:
+            self.domain_type_cache = domain_type
+            
+        domain_type = getattr(self, "domain_type_cache", "3D")
         
         # Limpar atores de geometria anteriores
         for name in list(self.plotter.actors.keys()):
-            if name.startswith("stl_electrode_") or name == "electrodes":
+            if name.startswith("stl_electrode_") or name.startswith("dxf_electrode_") or name == "electrodes":
                 self.plotter.remove_actor(name)
                 
         self.electrode_mesh = None
         self.loaded_meshes = []
         has_stl = False
+        has_dxf = False
         
         theme_mode = getattr(self, 'theme_mode', 'dark')
         
@@ -168,51 +260,67 @@ class PyVistaWidget(QWidget):
         el_color = "#4B5563" if theme_mode == "light" else "#9CA3AF"
         el_edge = "#111827" if theme_mode == "light" else "#4B5563"
         
-        # Carrega cada STL original listado
+        # Carrega cada STL ou DXF original listado
         if geometries_list:
             for idx, geom in enumerate(geometries_list):
                 file_path = geom.get("file_path", "")
-                if not file_path or not file_path.lower().endswith(".stl"):
+                if not file_path:
+                    continue
+                    
+                is_stl = file_path.lower().endswith(".stl")
+                is_dxf = file_path.lower().endswith(".dxf")
+                
+                if not (is_stl or is_dxf):
                     continue
                     
                 abs_path = resolve_path(file_path)
-                if os.path.exists(abs_path):
+                if abs_path and os.path.exists(abs_path):
                     try:
-                        # Lê o arquivo STL original via PyVista
-                        mesh = pv.read(abs_path)
+                        mesh = None
+                        actor_name = ""
                         
-                        # Aplica escala
-                        scale = geom.get("scale", 1.0)
-                        mesh.scale(scale, inplace=True)
-                        
-                        # Aplica translação
-                        tx, ty, tz = geom.get("translation", [0.0, 0.0, 0.0])
-                        mesh.translate([tx, ty, tz], inplace=True)
-                        
-                        actor_name = f"stl_electrode_{idx}_{geom.get('name', 'Solid')}"
-                        self.plotter.add_mesh(
-                            mesh,
-                            color=el_color,
-                            opacity=0.45,
-                            show_edges=True,
-                            edge_color=el_edge,
-                            name=actor_name
-                        )
-                        has_stl = True
-                        
-                        self.loaded_meshes.append({
-                            "mesh": mesh.copy(),
-                            "color": el_color,
-                            "opacity": 0.45,
-                            "show_edges": True,
-                            "edge_color": el_edge,
-                            "name": actor_name
-                        })
+                        if is_stl:
+                            # Lê o arquivo STL original via PyVista
+                            mesh = pv.read(abs_path)
+                            scale = geom.get("scale", 1.0)
+                            mesh.scale(scale, inplace=True)
+                            tx, ty, tz = geom.get("translation", [0.0, 0.0, 0.0])
+                            mesh.translate([tx, ty, tz], inplace=True)
+                            has_stl = True
+                            actor_name = f"stl_electrode_{idx}_{geom.get('name', 'Solid')}"
+                        elif is_dxf and (domain_type in ["2D", "2D_CYL", "2DCYL"]):
+                            # Lê o arquivo DXF original via helper
+                            layer = geom.get("layer", "")
+                            scale = geom.get("scale", 1.0)
+                            translation = geom.get("translation", [0.0, 0.0, 0.0])
+                            mesh = load_dxf_entities_as_mesh(abs_path, layer, scale, translation, domain_type)
+                            has_dxf = True
+                            actor_name = f"dxf_electrode_{idx}_{geom.get('name', 'Solid')}"
+                            
+                        if mesh is not None:
+                            self.plotter.add_mesh(
+                                mesh,
+                                color=el_color,
+                                opacity=0.55 if is_dxf else 0.45,
+                                show_edges=True,
+                                line_width=4 if is_dxf else 1,
+                                edge_color=el_edge,
+                                name=actor_name
+                            )
+                            
+                            self.loaded_meshes.append({
+                                "mesh": mesh.copy(),
+                                "color": el_color,
+                                "opacity": 0.55 if is_dxf else 0.45,
+                                "show_edges": True,
+                                "edge_color": el_edge,
+                                "name": actor_name
+                            })
                     except Exception as e:
-                        print(f"Error loading STL directly in PyVista: {e}")
+                        print(f"Error loading solid directly in PyVista: {e}")
         
-        # Carrega fallback/DXF do geometry.obj se disponível
-        if obj_path and os.path.exists(obj_path):
+        # Carrega fallback/DXF do geometry.obj se disponível e não temos representação DXF/STL direta
+        if obj_path and os.path.exists(obj_path) and not has_dxf:
             try:
                 self.electrode_mesh = pv.read(obj_path)
                 # Se renderizou STL, o fallback é secundário (exibe DXF), reduzimos a opacidade
@@ -248,6 +356,7 @@ class PyVistaWidget(QWidget):
 
     def load_trajectories(self, traj_path, color_by='mass', sample_step=1):
         """Lê e renderiza os arquivos de trajetórias simulados."""
+        self.sample_step = sample_step
         if not os.path.exists(traj_path):
             print(f"Trajectory file not found: {traj_path}")
             return False
@@ -298,14 +407,20 @@ class PyVistaWidget(QWidget):
         """Renderiza as trajetórias com cores e legendas de eixos em tamanho High-DPI."""
         try:
             sample_step = int(sample_step)
-            if sample_step < 1:
+            if sample_step < 0:
                 sample_step = 1
         except Exception:
             sample_step = 1
 
+        self.sample_step = sample_step
+
         for name in list(self.plotter.actors.keys()):
             if name.startswith("track_"):
                 self.plotter.remove_actor(name)
+                
+        if sample_step == 0:
+            self.plotter.render()
+            return
                 
         if self.pic_mode:
             return  # Hide complete trajectory lines in PIC mode
@@ -440,6 +555,10 @@ class PyVistaWidget(QWidget):
                     self.plotter.remove_actor("pic_trails")
             except Exception as e:
                 print(f"Error cleaning actors in load_pic_snapshot: {e}")
+
+            if sample_step == 0:
+                self.plotter.render()
+                return True
 
             # If trajectories are available, render the dynamic state of all particles at current_time
             if current_time is not None and hasattr(self, "trajectories") and self.trajectories:
@@ -853,7 +972,32 @@ class PyVistaWidget(QWidget):
             return
             
         try:
-            if plane_orient == 0:  # XY (Z = coord_val)
+            domain_type = getattr(self, "domain_type_cache", "3D")
+            
+            if domain_type == "2D":
+                # For Cartesian 2D simulations, project strictly on the XY plane (X = longitudinal, Y = transversal)
+                # Load xmin dynamically from E4 backend configuration to ensure exact alignment
+                xmin_val = -0.002 # Fallback
+                import json
+                import os
+                try:
+                    base_dir = os.path.dirname(os.path.abspath(__file__))
+                    config_path = os.path.abspath(os.path.join(base_dir, "..", "backend", "config_scenario.json"))
+                    if os.path.exists(config_path):
+                        with open(config_path, "r", encoding="utf-8") as f:
+                            cfg = json.load(f)
+                            xmin_val = cfg.get("xmin", -0.002)
+                except Exception as e:
+                    print(f"Error reading config_scenario.json in pyvista_widget: {e}")
+
+                # Ensure h_coords starts at xmin_val (if it starts at 0, shift it. Otherwise, keep it)
+                h_coords_shifted = np.array(h_coords)
+                if len(h_coords_shifted) > 0 and abs(h_coords_shifted[0] - 0.0) < 1e-7:
+                    h_coords_shifted += xmin_val
+
+                grid = pv.RectilinearGrid(h_coords_shifted, v_coords, np.array([coord_val]))
+                scalars = matrix.flatten(order='C')
+            elif plane_orient == 0:  # XY (Z = coord_val)
                 grid = pv.RectilinearGrid(h_coords, v_coords, np.array([coord_val]))
                 scalars = matrix.flatten(order='C')
             elif plane_orient == 1:  # XZ (Y = coord_val)

@@ -33,7 +33,7 @@ double r0 = 8e-3;
 double J = 300.0;
 
 double sc_alpha = 0.9;
-double h = 0.5e-3;
+double h = 1.0e-3;
 double nperh = 100;
 
 
