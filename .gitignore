@@ -66,4 +66,3 @@ bent/teste*/config_scenario.json
 # Exclude image formats in subdirectories
 **/*.jpg
 **/*.jpeg
-**/*.png
